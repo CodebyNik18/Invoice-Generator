@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvoiceFlow – Create Beautiful Invoices</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+
+  <div class="cursor-glow" id="glow"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="logo">Invoice<span>Flow</span></a>
+    <div class="nav-center">
+      <a href="#features">Features</a>
+      <a href="#how">How it Works</a>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-outline" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-solid" onclick="openModal('signup')">Register Free</button>
+    </div>
+    <button class="hamburger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#features" onclick="closeMobile()">Features</a>
+    <a href="#how" onclick="closeMobile()">How it Works</a>
+    <button class="btn btn-outline" style="font-size:1rem" onclick="closeMobile();openModal('login')">Sign In</button>
+    <button class="btn btn-solid" style="font-size:1rem" onclick="closeMobile();openModal('signup')">Register
+      Free</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-blob bb1"></div>
+    <div class="bg-blob bb2"></div>
+
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="eyebrow anim in"><span class="dot-live"></span>Free Invoice Generator</div>
+        <h1 class="anim in">Create <i>Beautiful</i><br>Invoices in Minutes</h1>
+        <p class="hero-desc anim in">Generate professional invoices, download as PDF, and track every client transaction
+          — all saved to your personal account.</p>
+        <div class="hero-btns anim in">
+          <button class="btn btn-terra btn-lg" onclick="openModal('signup')">Start Creating →</button>
+          <button class="btn btn-outline btn-lg" onclick="openModal('login')">Sign In</button>
+        </div>
+        <div class="hero-stats anim in">
+          <div class="stat"><span class="stat-n">12K+</span><span class="stat-l">Happy Users</span></div>
+          <div class="stat"><span class="stat-n">Free</span><span class="stat-l">Always & Forever</span></div>
+          <div class="stat"><span class="stat-n">PDF</span><span class="stat-l">Instant Export</span></div>
+        </div>
+      </div>
+
+      <div class="inv-wrap">
+        <div class="inv-shadow"></div>
+        <div class="inv-card">
+          <div class="paid-pill">✓ PAID</div>
+          <div class="ih">
+            <div class="il">Your<br>Logo</div>
+            <div>
+              <div class="it">INVOICE</div>
+              <div class="in2">#INV-2026-088</div>
+            </div>
+          </div>
+          <hr class="ihr">
+          <div class="im">
+            <span class="iml">Bill To</span><span class="imv">Acme Corp.</span>
+            <span class="iml">Date</span><span class="imv">Apr 19, 2026</span>
+            <span class="iml">Due Date</span><span class="imv">May 3, 2026</span>
+            <span class="iml">PO Number</span><span class="imv">PO-2890</span>
+          </div>
+          <table class="itable">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>UI Design</td>
+                <td>3</td>
+                <td>₹5,000</td>
+                <td>₹15,000</td>
+              </tr>
+              <tr>
+                <td>Development</td>
+                <td>8</td>
+                <td>₹3,500</td>
+                <td>₹28,000</td>
+              </tr>
+              <tr>
+                <td>Consulting</td>
+                <td>2</td>
+                <td>₹8,000</td>
+                <td>₹16,000</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="itotal">
+            <span class="itl">Balance Due</span>
+            <span class="itv">₹59,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="s-inner">
+      <span class="s-tag reveal">✦ Features</span>
+      <h2 class="s-title reveal">Everything you need<br>to get paid</h2>
+      <p class="s-sub reveal">A clean, fast toolkit built for freelancers and small businesses. No bloat, no
+        subscriptions.</p>
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <rect x="4" y="3" width="16" height="18" rx="2" />
+              <path d="M8 7h8M8 11h8M8 15h5" />
+            </svg>
+          </div>
+          <h3>Instant Invoice Builder</h3>
+          <p>Fill in your details, add line items, and your invoice is ready in under a minute — no design experience
+            needed.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3>Secure Login & Accounts</h3>
+          <p>Your data is always safe. Sign up, log in securely, and access your personal dashboard from any device.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <path d="M3 6h18M3 12h18M3 18h18" />
+              <circle cx="19" cy="6" r="3" fill="var(--mint)" stroke="var(--green-dark)" />
+            </svg>
+          </div>
+          <h3>Full Invoice History</h3>
+          <p>Every invoice you create is saved to your account. Search, filter, duplicate, or download any past invoice.
+          </p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="12" y1="12" x2="12" y2="18" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+          </div>
+          <h3>One-Click PDF Export</h3>
+          <p>Download a pixel-perfect, print-ready PDF with your logo, items, taxes, and totals — every single time.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3" />
+              <path d="M9 15h3l8.5-8.5a1.5 1.5 0 0 0-3-3L9 12v3" />
+            </svg>
+          </div>
+          <h3>Smart Auto-Calculations</h3>
+          <p>Subtotals, tax, discounts, and balance due — all calculated automatically as you type. Zero math required.
+          </p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <path d="M9 7h6M9 11h6M9 15h3" />
+            </svg>
+          </div>
+          <h3>Mobile-Friendly</h3>
+          <p>Create and share invoices from your phone, tablet, or desktop with the exact same smooth experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="s-inner">
+      <span class="s-tag reveal">✦ Process</span>
+      <h2 class="s-title reveal">Three steps to<br><span
+          style="color:var(--green-dark);font-style:italic;font-family:'Cormorant Garamond',serif">get paid
+          faster</span></h2>
+      <div class="how-grid">
+        <div class="how-step reveal">
+          <div class="how-num">1</div>
+          <h3>Create Your Account</h3>
+          <p>Register in seconds. Your profile, logo, and business info are saved for every future invoice.</p>
+        </div>
+        <div class="how-step reveal">
+          <div class="how-num">2</div>
+          <h3>Build Your Invoice</h3>
+          <p>Add client details, line items, tax, and discounts. We handle all calculations automatically.</p>
+        </div>
+        <div class="how-step reveal">
+          <div class="how-num">3</div>
+          <h3>Download & Send</h3>
+          <p>Export a polished PDF and send it directly to your client. View it anytime in your history.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to <i>get paid</i> faster?</h2>
+    <p>Join thousands of freelancers and businesses — completely free, no credit card needed.</p>
+    <div class="cta-btns">
+      <button class="btn btn-terra btn-lg" onclick="openModal('signup')">Create Free Account →</button>
+      <button class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)"
+        onclick="openModal('login')">Already have an account</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">InvoiceFlow</span>
+      <div class="footer-links">
+        <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">Contact</a>
+      </div>
+      <span>© 2026 InvoiceFlow. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal" onclick="overlayClose(event,'login')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('login')">✕</button>
+      <h2>Welcome back</h2>
+      <p class="modal-sub">No account? <a onclick="switchModal('login','signup')">Register free →</a></p>
+      <div class="fg">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <input type="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="f-submit" onclick="doAuth('login')">Sign In</button>
+      <div class="divider">or continue with</div>
+      <button class="g-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            fill="#4285F4" />
+          <path
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            fill="#34A853" />
+          <path
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            fill="#FBBC05" />
+          <path
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            fill="#EA4335" />
+        </svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>
+
+  <!-- SIGNUP MODAL -->
+  <div class="modal-overlay" id="signupModal" onclick="overlayClose(event,'signup')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('signup')">✕</button>
+      <h2>Create account</h2>
+      <p class="modal-sub">Already registered? <a onclick="switchModal('signup','login')">Sign in →</a></p>
+      <div class="fg">
+        <label>Full Name</label>
+        <input type="text" placeholder="Riya Sharma" autocomplete="name" />
+      </div>
+      <div class="fg">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <input type="password" placeholder="Create a strong password" autocomplete="new-password" />
+      </div>
+      <button class="f-submit" onclick="doAuth('signup')">Register Free →</button>
+      <div class="divider">or continue with</div>
+      <button class="g-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            fill="#4285F4" />
+          <path
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            fill="#34A853" />
+          <path
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            fill="#FBBC05" />
+          <path
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            fill="#EA4335" />
+        </svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>
+  <script src="{% static 'js/index.js' %}"></script>
+
+</body>
+
+</html>
