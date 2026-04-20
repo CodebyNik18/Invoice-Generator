@@ -1,11 +1,263 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us – InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/pages/contact.css' %}">
 </head>
+
 <body>
-    <h1>Contact Page</h1>
+
+    <div id="glow"></div>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#features">Features</a>
+            <a href="help.html">Help</a>
+            <a href="contact.html" class="active">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <a href="/login" class="btn btn-ghost">Sign In</a>
+            <a href="/register" class="btn btn-dark">Register Free</a>
+        </div>
+        <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+
+    <div class="mob-menu" id="mobMenu">
+        <a href="index.html" onclick="closeMob()">Home</a>
+        <a href="index.html#features" onclick="closeMob()">Features</a>
+        <a href="help.html" onclick="closeMob()">Help</a>
+        <a href="contact.html" onclick="closeMob()">Contact</a>
+        <a href="/login" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+        <a href="/register" class="btn btn-dark" onclick="closeMob()">Register Free</a>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <header class="page-header">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="blob blob-1"></div>
+        <div class="ph-inner">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">Home</a><span class="bc-sep">/</span><span>Contact</span>
+            </nav>
+            <span class="tag">✦ Get in Touch</span>
+            <h1 class="ph-title">We'd love to <i>hear</i><br>from you</h1>
+            <p class="ph-sub">Questions, suggestions, or feedback? Our team typically replies within 24 hours on working
+                days.</p>
+        </div>
+    </header>
+
+    <!-- CONTACT -->
+    <section class="contact-section">
+        <div class="contact-grid">
+
+            <!-- Info cards -->
+            <div class="info-stack">
+                <div class="info-card">
+                    <div class="ic-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                    </div>
+                    <div class="ic-body">
+                        <strong>Email Us</strong>
+                        <p>For all enquiries and support.<br><a
+                                href="mailto:hello@invoiceflow.in">hello@invoiceflow.in</a></p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="ic-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.1 11.83 19.79 19.79 0 0 1 1.03 3.2 2 2 0 0 1 3 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                    </div>
+                    <div class="ic-body">
+                        <strong>Call Us</strong>
+                        <p>Mon–Fri, 9 am to 6 pm IST.<br><a href="tel:+918000000000">+91 80000 00000</a></p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="ic-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div class="ic-body">
+                        <strong>Response Time</strong>
+                        <p>Usually within <strong>24 hours</strong>. For urgent issues, use the live chat in your
+                            dashboard.</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="ic-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <div class="ic-body">
+                        <strong>Our Office</strong>
+                        <p>InvoiceFlow HQ<br>Bengaluru, Karnataka – 560001<br>India</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact form -->
+            <div class="form-card">
+                <div class="fc-title">Send a Message</div>
+                <p class="fc-sub">Fill out the form below and we'll be in touch as soon as possible.</p>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label>First Name</label>
+                        <input type="text" placeholder="Riya" id="fname" />
+                    </div>
+                    <div class="field">
+                        <label>Last Name</label>
+                        <input type="text" placeholder="Sharma" id="lname" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="you@example.com" id="email" />
+                </div>
+                <div class="field">
+                    <label>Topic</label>
+                    <select id="topic">
+                        <option value="" disabled selected>Select a topic…</option>
+                        <option>General Enquiry</option>
+                        <option>Technical Support</option>
+                        <option>Bug Report</option>
+                        <option>Feature Request</option>
+                        <option>Account Help</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Message</label>
+                    <textarea placeholder="Tell us how we can help…" id="message"></textarea>
+                </div>
+                <div class="submit-row">
+                    <button class="btn-submit" onclick="submitForm()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                        Send Message
+                    </button>
+                    <span class="submit-note">We'll reply within 24 hours</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="faq-inner">
+            <span class="section-tag reveal">✦ FAQ</span>
+            <h2 class="section-title reveal">Common Questions</h2>
+            <p class="section-sub reveal">Can't find what you need? <a href="help.html">Visit our Help Centre →</a></p>
+
+            <div class="faq-list">
+                <div class="faq-item reveal">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Is InvoiceFlow completely free?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-body">
+                        <p>Yes — InvoiceFlow is 100% free to use. Create invoices, download PDFs, and access your full
+                            history with no hidden charges or subscriptions, ever.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Can I use InvoiceFlow on my phone?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-body">
+                        <p>Absolutely. InvoiceFlow is fully responsive and works smoothly on mobile, tablet, and
+                            desktop. Your invoices and history sync to your account across all devices.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        How do I add my company logo to invoices?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-body">
+                        <p>Log in, go to Profile Settings, and upload your logo. It will automatically appear on all
+                            future invoices. PNG or SVG format is recommended for the best quality output.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Is my invoice data secure?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-body">
+                        <p>Yes. All data is encrypted in transit (HTTPS/TLS) and at rest. We never share or sell your
+                            information. You can export or permanently delete your data at any time from account
+                            settings.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Can I edit an invoice after saving it?
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-body">
+                        <p>Yes. Any invoice in your history can be reopened, edited, and saved as a new version. You can
+                            also duplicate invoices for recurring clients to save time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="foot-inner">
+            <span class="foot-logo">InvoiceFlow</span>
+            <div class="foot-links">
+                <a href="index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            <span class="foot-copy">© 2026 InvoiceFlow. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <span class="toast-check">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </span>
+        Message sent! We'll reply within 24 hours.
+    </div>
+
+    <script src="{% static 'js/pages/contact.js' %}"></script>
 </body>
+
 </html>

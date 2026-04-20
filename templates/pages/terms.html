@@ -1,11 +1,239 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service - InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/pages/terms.css' %}">
 </head>
+
 <body>
-    <h1>Terms Page</h1>
+
+    <div id="glow"></div>
+
+    <nav id="nav">
+        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="help.html">Help</a>
+            <a href="contact.html">Contact</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html" class="active">Terms</a>
+        </div>
+        <div class="nav-actions">
+            <a href="/login" class="btn btn-ghost">Sign In</a>
+            <a href="/register" class="btn btn-dark">Register Free</a>
+        </div>
+        <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+
+    <div class="mob-menu" id="mobMenu">
+        <a href="index.html" onclick="closeMob()">Home</a>
+        <a href="help.html" onclick="closeMob()">Help</a>
+        <a href="contact.html" onclick="closeMob()">Contact</a>
+        <a href="privacy.html" onclick="closeMob()">Privacy</a>
+        <a href="terms.html" onclick="closeMob()">Terms</a>
+        <a href="/login" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+        <a href="/register" class="btn btn-dark" onclick="closeMob()">Register Free</a>
+    </div>
+
+    <header class="page-header">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="blob blob-1"></div>
+        <div class="ph-inner">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">Home</a><span>/</span><span>Terms of Service</span>
+            </nav>
+            <span class="tag">&#10022; Legal</span>
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <h1 class="ph-title">Terms of <i>Service</i></h1>
+                    <p class="ph-sub">These terms explain the rules for using InvoiceFlow, what belongs to you, what
+                        belongs to us, and where responsibility sits when invoices are created through the platform.</p>
+                    <div class="ph-meta">
+                        <span class="meta-chip"><span class="meta-dot"></span>Last updated: April 19, 2026</span>
+                        <span class="meta-chip"><span class="meta-dot"></span>Effective: April 19, 2026</span>
+                        <span class="meta-chip"><span class="meta-dot"></span>About 10 min read</span>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <div class="summary-box">
+                        <div class="sb-icon">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
+                        </div>
+                        <div class="sb-text">
+                            <strong>Plain-English Summary</strong>
+                            <p>Use InvoiceFlow lawfully and fairly. You keep ownership of the invoice data you create.
+                                We may suspend accounts that abuse the service, and we do not verify the accuracy of
+                                your invoice content.</p>
+                        </div>
+                    </div>
+                    <div class="quick-nav">
+                        <strong>Jump To</strong>
+                        <div class="quick-nav-grid">
+                            <a class="quick-link" href="#t1">Acceptance</a>
+                            <a class="quick-link" href="#t2">The Service</a>
+                            <a class="quick-link" href="#t3">Accounts</a>
+                            <a class="quick-link" href="#t4">Acceptable Use</a>
+                            <a class="quick-link" href="#t5">Your Content</a>
+                            <a class="quick-link" href="#t6">Intellectual Property</a>
+                            <a class="quick-link" href="#t7">Liability</a>
+                            <a class="quick-link" href="#t8">Termination</a>
+                            <a class="quick-link" href="#t9">Changes</a>
+                            <a class="quick-link" href="#t10">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="doc-body">
+        <div class="doc-inner">
+            <div class="content-shell">
+                <div class="section-grid">
+                    <section class="doc-section" id="t1">
+                        <h2>1. Acceptance of Terms</h2>
+                        <p>By accessing or using InvoiceFlow, you agree to be bound by these Terms of Service. If you do
+                            not agree, please do not use the service.</p>
+                        <p>These terms apply to visitors, registered users, and anyone else accessing the platform. By
+                            creating an account, you confirm that you are legally able to agree to these terms.</p>
+                    </section>
+
+                    <section class="doc-section" id="t2">
+                        <h2>2. The Service</h2>
+                        <p>InvoiceFlow is a web-based invoice generation platform that helps users create, manage, and
+                            export invoices in a professional format.</p>
+                        <p>We may change, suspend, or discontinue features from time to time. When changes are
+                            significant, we try to communicate them in advance where practical.</p>
+                        <p>We aim for reliability, but uninterrupted access is not guaranteed.</p>
+                    </section>
+
+                    <section class="doc-section" id="t3">
+                        <h2>3. Accounts and Registration</h2>
+                        <p>To use protected features, you may need to register with accurate account information and
+                            keep your credentials secure.</p>
+                        <ul>
+                            <li>Provide current and truthful registration details</li>
+                            <li>Keep your password private and protected</li>
+                            <li>Notify us if you suspect unauthorized account access</li>
+                            <li>Take responsibility for activity that occurs under your account</li>
+                        </ul>
+                    </section>
+
+                    <section class="doc-section" id="t4">
+                        <h2>4. Acceptable Use</h2>
+                        <p>You agree to use InvoiceFlow only for lawful, legitimate purposes. You must not misuse the
+                            service, interfere with it, or use it to create deceptive or illegal content.</p>
+                        <ul>
+                            <li>Create fraudulent, misleading, or unlawful invoices</li>
+                            <li>Attempt to access systems or accounts without permission</li>
+                            <li>Reverse engineer, scrape, or automate abusive access to the platform</li>
+                            <li>Impersonate another person or business</li>
+                            <li>Use the service in violation of applicable law</li>
+                        </ul>
+                        <div class="warn-box">
+                            <p>Serious or repeated misuse may result in immediate suspension or permanent termination of
+                                your account.</p>
+                        </div>
+                    </section>
+
+                    <section class="doc-section" id="t5">
+                        <h2>5. Your Content</h2>
+                        <p>You retain ownership of the business details, invoice content, logos, and other materials you
+                            upload or create through InvoiceFlow.</p>
+                        <p>By using the service, you grant us a limited license to host, process, and display that
+                            content only as needed to deliver the product to you.</p>
+                        <p>You are responsible for the accuracy, legality, and completeness of the invoices you create.
+                            InvoiceFlow does not independently verify invoice content.</p>
+                    </section>
+
+                    <section class="doc-section" id="t6">
+                        <h2>6. Intellectual Property</h2>
+                        <p>The InvoiceFlow platform, including its software, design, interface, branding, and original
+                            content, belongs to InvoiceFlow and is protected by applicable intellectual property law.
+                        </p>
+                        <p>Nothing in these terms gives you ownership of our branding, software, or visual identity.</p>
+                        <div class="note-box">
+                            <p>Your invoice data remains yours. Our rights over it are limited to what is necessary to
+                                operate the service.</p>
+                        </div>
+                    </section>
+
+                    <section class="doc-section" id="t7">
+                        <h2>7. Limitation of Liability</h2>
+                        <p>To the fullest extent allowed by law, InvoiceFlow is provided on an "as is" and "as
+                            available" basis without guarantees of uninterrupted operation or suitability for every
+                            purpose.</p>
+                        <p>We are not liable for indirect, incidental, or consequential losses that result from using or
+                            being unable to use the service.</p>
+                        <p>You remain responsible for reviewing invoice details before sending or relying on them for
+                            financial, legal, or tax purposes.</p>
+                    </section>
+
+                    <section class="doc-section" id="t8">
+                        <h2>8. Termination</h2>
+                        <p>You may stop using InvoiceFlow and delete your account at any time. We may suspend or
+                            terminate access if we reasonably believe these terms have been violated.</p>
+                        <p>Some sections, including ownership, liability, and dispute-related provisions, continue to
+                            apply even after an account is closed.</p>
+                    </section>
+
+                    <section class="doc-section" id="t9">
+                        <h2>9. Changes to These Terms</h2>
+                        <p>We may revise these terms occasionally to reflect product, legal, or operational changes.
+                            When we do, we update the date at the top of this page.</p>
+                        <p>Continuing to use InvoiceFlow after updated terms take effect means you accept the revised
+                            version.</p>
+                    </section>
+
+                    <section class="doc-section full" id="t10">
+                        <h2>10. Contact Us</h2>
+                        <p>If you have questions about these terms, or you want something explained in simpler language,
+                            we are happy to help.</p>
+                        <div class="contact-card">
+                            <p><strong>Legal team</strong><br>Email: <a
+                                    href="mailto:legal@invoiceflow.in">legal@invoiceflow.in</a><br>Location: Bengaluru,
+                                Karnataka, India - 560001</p>
+                            <a href="contact.html" class="btn btn-terra">Get in Touch</a>
+                        </div>
+                        <div class="note-box">
+                            <p>These terms are governed by the laws of India, with disputes subject to the courts of
+                                Bengaluru, Karnataka.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="foot-inner">
+            <span class="foot-logo">InvoiceFlow</span>
+            <div class="foot-links">
+                <a href="index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            <span class="foot-copy">&copy; 2026 InvoiceFlow. All rights reserved.</span>
+        </div>
+    </footer>
+    <script src="{% static 'js/pages/terms.js' %}"></script>
 </body>
+
 </html>

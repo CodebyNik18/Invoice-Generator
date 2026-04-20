@@ -1,11 +1,260 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help Centre - InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/pages/help.css' %}">
 </head>
+
 <body>
-    <h1>Help Page</h1>
+
+    <div id="glow"></div>
+
+    <nav id="nav">
+        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#features">Features</a>
+            <a href="help.html" class="active">Help</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <a href="/login" class="btn btn-ghost">Sign In</a>
+            <a href="/register" class="btn btn-dark">Register Free</a>
+        </div>
+        <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+
+    <div class="mob-menu" id="mobMenu">
+        <a href="index.html" onclick="closeMob()">Home</a>
+        <a href="index.html#features" onclick="closeMob()">Features</a>
+        <a href="help.html" onclick="closeMob()">Help</a>
+        <a href="contact.html" onclick="closeMob()">Contact</a>
+        <a href="/login" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+        <a href="/register" class="btn btn-dark" onclick="closeMob()">Register Free</a>
+    </div>
+
+    <header class="page-header">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="blob blob-1"></div>
+        <div class="ph-inner">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">Home</a><span>/</span><span>Help Centre</span>
+            </nav>
+            <span class="tag">&#10022; Help Centre</span>
+            <h1 class="ph-title">How can we <i>help</i><br>you today?</h1>
+            <p class="ph-sub">Browse practical guides, setup notes, and quick answers for the most common InvoiceFlow
+                tasks.</p>
+            <div class="search-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search articles, guides, topics..."
+                    oninput="filterArticles(this.value)" autocomplete="off" />
+            </div>
+        </div>
+    </header>
+
+    <section class="help-body">
+        <div class="help-inner">
+            <span class="section-label reveal">Browse by Category</span>
+            <h2 class="section-heading reveal">Start with the area you need most</h2>
+
+            <div class="cat-grid">
+                <section class="cat-card" id="getting-started">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg></div>
+                    <h3>Getting Started</h3>
+                    <p>Account setup, first invoice workflow, and profile basics for new users.</p>
+                    <span class="cat-pill">6 articles</span>
+                    <button class="cat-button" type="button" onclick="focusSearch('first invoice setup account')">Show
+                        related guides</button>
+                </section>
+                <section class="cat-card" id="invoices">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <rect x="4" y="3" width="16" height="18" rx="2" />
+                            <path d="M8 7h8M8 11h8M8 15h5" />
+                        </svg></div>
+                    <h3>Creating Invoices</h3>
+                    <p>Line items, tax, discounts, logos, custom fields, and invoice formatting.</p>
+                    <span class="cat-pill">9 articles</span>
+                    <button class="cat-button" type="button" onclick="focusSearch('tax discount invoice currency')">Show
+                        related guides</button>
+                </section>
+                <section class="cat-card" id="pdf">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="12" y1="12" x2="12" y2="18" />
+                            <line x1="9" y1="15" x2="15" y2="15" />
+                        </svg></div>
+                    <h3>PDF and Exporting</h3>
+                    <p>Download, print, and share invoices as polished PDF files.</p>
+                    <span class="cat-pill">4 articles</span>
+                    <button class="cat-button" type="button" onclick="focusSearch('pdf download print share')">Show
+                        related guides</button>
+                </section>
+                <section class="cat-card" id="history">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <polyline points="1 4 1 10 7 10" />
+                            <path d="M3.51 15a9 9 0 1 0 .49-4" />
+                        </svg></div>
+                    <h3>Invoice History</h3>
+                    <p>Find, filter, duplicate, and manage previously saved invoices.</p>
+                    <span class="cat-pill">5 articles</span>
+                    <button class="cat-button" type="button"
+                        onclick="focusSearch('history duplicate past invoices')">Show related guides</button>
+                </section>
+                <section class="cat-card" id="account">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg></div>
+                    <h3>Account and Settings</h3>
+                    <p>Password, email, profile updates, notifications, and account data controls.</p>
+                    <span class="cat-pill">7 articles</span>
+                    <button class="cat-button" type="button"
+                        onclick="focusSearch('account email password delete data')">Show related guides</button>
+                </section>
+                <section class="cat-card" id="trouble">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                            stroke-width="1.8">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg></div>
+                    <h3>Troubleshooting</h3>
+                    <p>Quick fixes for PDF, login, formatting, and browser-related issues.</p>
+                    <span class="cat-pill">8 articles</span>
+                    <button class="cat-button" type="button"
+                        onclick="focusSearch('troubleshoot pdf browser issue')">Show related guides</button>
+                </section>
+            </div>
+
+            <div class="art-header reveal">
+                <h2>Popular Articles</h2>
+                <button class="link-button" type="button" onclick="goToContact()">Need more help? Contact us</button>
+            </div>
+
+            <div class="art-grid" id="artGrid">
+                <article class="art-card reveal"
+                    data-text="create first invoice getting started walkthrough first invoice setup account">
+                    <span class="art-cat">Getting Started</span>
+                    <h3>How to create your first invoice</h3>
+                    <p>A complete walkthrough from account setup to downloading your first PDF invoice.</p>
+                    <div class="art-foot"><span class="art-time">3 min read</span><span class="art-note">Starter
+                            guide</span></div>
+                </article>
+                <article class="art-card reveal" data-text="tax discount shipping gst invoice">
+                    <span class="art-cat">Invoices</span>
+                    <h3>Adding tax, discounts, and shipping</h3>
+                    <p>Apply GST, percentage or flat discounts, and shipping charges to any invoice.</p>
+                    <div class="art-foot"><span class="art-time">4 min read</span><span class="art-note">Common
+                            setup</span></div>
+                </article>
+                <article class="art-card reveal" data-text="download print pdf share invoice">
+                    <span class="art-cat">PDF Export</span>
+                    <h3>Downloading and sharing your invoice PDF</h3>
+                    <p>How to export a PDF, save it locally, and send it to clients by email or direct link.</p>
+                    <div class="art-foot"><span class="art-time">2 min read</span><span class="art-note">Quick
+                            task</span></div>
+                </article>
+                <article class="art-card reveal" data-text="company logo upload branding profile">
+                    <span class="art-cat">Account</span>
+                    <h3>Uploading your company logo</h3>
+                    <p>Add your brand logo to your profile so it appears on every invoice automatically.</p>
+                    <div class="art-foot"><span class="art-time">2 min read</span><span class="art-note">Branding</span>
+                    </div>
+                </article>
+                <article class="art-card reveal" data-text="history find past duplicate recurring invoice">
+                    <span class="art-cat">History</span>
+                    <h3>Finding and duplicating past invoices</h3>
+                    <p>Search your history, reopen old invoices, and duplicate them for recurring clients.</p>
+                    <div class="art-foot"><span class="art-time">3 min read</span><span class="art-note">Workflow
+                            tip</span></div>
+                </article>
+                <article class="art-card reveal" data-text="pdf not downloading browser issue fix troubleshoot">
+                    <span class="art-cat">Troubleshooting</span>
+                    <h3>PDF not downloading? Try this first</h3>
+                    <p>Browser settings that block PDF downloads and how to resolve them quickly.</p>
+                    <div class="art-foot"><span class="art-time">2 min read</span><span class="art-note">Fast fix</span>
+                    </div>
+                </article>
+                <article class="art-card reveal" data-text="change email password account settings security">
+                    <span class="art-cat">Account</span>
+                    <h3>Changing your email or password</h3>
+                    <p>Step-by-step guidance for updating your login credentials safely from account settings.</p>
+                    <div class="art-foot"><span class="art-time">2 min read</span><span class="art-note">Security</span>
+                    </div>
+                </article>
+                <article class="art-card reveal" data-text="number format currency rupee dollar euro invoice">
+                    <span class="art-cat">Invoices</span>
+                    <h3>Changing currency and number format</h3>
+                    <p>Set your currency symbol and number style to match your invoice requirements.</p>
+                    <div class="art-foot"><span class="art-time">2 min read</span><span
+                            class="art-note">Formatting</span></div>
+                </article>
+                <article class="art-card reveal" data-text="delete account data export privacy">
+                    <span class="art-cat">Account</span>
+                    <h3>Exporting or deleting your data</h3>
+                    <p>How to download all invoice data or permanently remove your account and records.</p>
+                    <div class="art-foot"><span class="art-time">3 min read</span><span class="art-note">Privacy</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="no-results" id="noResults">
+                <p>No articles found</p>
+                <p>Try a different search term, or use the support option below.</p>
+            </div>
+
+            <div class="cta-banner reveal">
+                <div class="cta-text">
+                    <h2>Still need help?</h2>
+                    <p>Our support team is ready to help with account issues, bug reports, and setup questions.</p>
+                </div>
+                <div class="cta-actions">
+                    <button type="button" class="btn btn-terra" onclick="goToContact()">Contact Support</button>
+                    <button type="button" class="btn btn-ghost"
+                        style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.78)"
+                        onclick="window.location.href='mailto:hello@invoiceflow.in'">Email Us</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="foot-inner">
+            <span class="foot-logo">InvoiceFlow</span>
+            <div class="foot-links">
+                <a href="index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            <span class="foot-copy">&copy; 2026 InvoiceFlow. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/pages/help.js' %}"></script>
 </body>
+
 </html>

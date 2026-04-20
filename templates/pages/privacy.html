@@ -1,11 +1,225 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy - InvoiceFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/pages/privacy.css' %}">
 </head>
+
 <body>
-    <h1>Privacy Page</h1>
+
+  <div id="glow"></div>
+
+  <nav id="nav">
+    <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="help.html">Help</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html" class="active">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="nav-actions">
+      <a href="/login" class="btn btn-ghost">Sign In</a>
+      <a href="/register" class="btn btn-dark">Register Free</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mob-menu" id="mobMenu">
+    <a href="index.html" onclick="closeMob()">Home</a>
+    <a href="help.html" onclick="closeMob()">Help</a>
+    <a href="contact.html" onclick="closeMob()">Contact</a>
+    <a href="privacy.html" onclick="closeMob()">Privacy</a>
+    <a href="terms.html" onclick="closeMob()">Terms</a>
+    <a href="/login" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+    <a href="/register" class="btn btn-dark" onclick="closeMob()">Register Free</a>
+  </div>
+
+  <header class="page-header">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="blob blob-1"></div>
+    <div class="ph-inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a><span>/</span><span>Privacy Policy</span>
+      </nav>
+      <span class="tag">&#10022; Legal</span>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="ph-title">Your <i>Privacy</i><br>Matters to Us</h1>
+          <p class="ph-sub">InvoiceFlow is built for people who want their invoice data to stay theirs. This page
+            explains what we collect, why we collect it, and the controls you have over your account.</p>
+          <div class="ph-meta">
+            <span class="meta-chip"><span class="meta-dot"></span>Last updated: April 19, 2026</span>
+            <span class="meta-chip"><span class="meta-dot"></span>Effective: April 19, 2026</span>
+            <span class="meta-chip"><span class="meta-dot"></span>About 8 min read</span>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="summary-box">
+            <div class="sb-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="sb-text">
+              <strong>Plain-English Summary</strong>
+              <p>We collect only what we need to run your account and generate invoices. We do not sell your data, and
+                you can request deletion of your account data at any time.</p>
+            </div>
+          </div>
+          <div class="quick-nav">
+            <strong>Jump To</strong>
+            <div class="quick-nav-grid">
+              <a class="quick-link" href="#s1">Information We Collect</a>
+              <a class="quick-link" href="#s2">How We Use It</a>
+              <a class="quick-link" href="#s3">Sharing and Disclosure</a>
+              <a class="quick-link" href="#s4">Data Security</a>
+              <a class="quick-link" href="#s5">Cookies</a>
+              <a class="quick-link" href="#s6">Your Rights</a>
+              <a class="quick-link" href="#s7">Data Retention</a>
+              <a class="quick-link" href="#s8">Contact</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="doc-body">
+    <div class="doc-inner">
+      <div class="content-shell">
+        <div class="section-grid">
+          <section class="doc-section" id="s1">
+            <h2>1. Information We Collect</h2>
+            <p>When you create an account and use InvoiceFlow, we collect the minimum information needed to provide the
+              service safely and reliably.</p>
+            <p><strong>Account information</strong> includes your name, email address, and password, which is stored as
+              a secure hash rather than plain text.</p>
+            <p><strong>Profile and invoice data</strong> includes your business details, uploaded logo, billing
+              information, client information, dates, line items, and totals.</p>
+            <p><strong>Usage and technical data</strong> includes device, browser, IP address, and basic activity
+              signals so we can improve performance and protect accounts.</p>
+          </section>
+
+          <section class="doc-section" id="s2">
+            <h2>2. How We Use Your Information</h2>
+            <p>We use your information only to operate, improve, and secure InvoiceFlow.</p>
+            <ul>
+              <li>Create and maintain your account</li>
+              <li>Generate, save, and retrieve invoices you create</li>
+              <li>Send service emails such as verification and password reset messages</li>
+              <li>Prevent abuse, fraud, and unauthorized access</li>
+              <li>Understand broad usage patterns so we can improve the product</li>
+              <li>Meet legal or compliance obligations when required</li>
+            </ul>
+            <div class="note-box">
+              <p>We do not use your personal data for advertising, resale, or unrelated profiling.</p>
+            </div>
+          </section>
+
+          <section class="doc-section" id="s3">
+            <h2>3. Sharing and Disclosure</h2>
+            <p>We do not sell, rent, or trade your data. We share it only in limited cases where it is necessary to run
+              the service or follow the law.</p>
+            <ul>
+              <li><strong>Service providers:</strong> trusted vendors such as hosting or email providers that help us
+                operate InvoiceFlow</li>
+              <li><strong>Legal requests:</strong> when disclosure is required by law, regulation, or court order</li>
+              <li><strong>Business transfers:</strong> if InvoiceFlow is merged, acquired, or reorganized, with
+                equivalent privacy protections applied</li>
+              <li><strong>Your consent:</strong> if you explicitly authorize us to share data for a specific purpose
+              </li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="s4">
+            <h2>4. Data Security</h2>
+            <p>We use industry-standard safeguards to protect data in transit and at rest. That includes HTTPS, access
+              controls, secure password handling, and tightly limited internal access.</p>
+            <p>No system can promise absolute security, but we work to reduce risk and respond quickly if something goes
+              wrong.</p>
+            <p>If you believe your account or data has been compromised, email <a
+                href="mailto:security@invoiceflow.in">security@invoiceflow.in</a> as soon as possible.</p>
+          </section>
+
+          <section class="doc-section" id="s5">
+            <h2>5. Cookies</h2>
+            <p>We use a small number of cookies and similar technologies that are necessary for core features such as
+              authentication and maintaining your session.</p>
+            <p>We do not use advertising cookies or invasive third-party tracking on this page. Disabling essential
+              cookies may affect how the app works.</p>
+          </section>
+
+          <section class="doc-section" id="s6">
+            <h2>6. Your Rights</h2>
+            <p>Depending on where you live, you may have the right to access, correct, export, or delete your personal
+              data.</p>
+            <ul>
+              <li><strong>Access:</strong> request a copy of the data we hold about you</li>
+              <li><strong>Correction:</strong> update inaccurate account information</li>
+              <li><strong>Deletion:</strong> ask us to permanently delete your account and data</li>
+              <li><strong>Portability:</strong> receive your invoice data in a usable format</li>
+              <li><strong>Objection:</strong> challenge certain uses of your data when applicable</li>
+            </ul>
+            <p>To make a request, contact <a href="mailto:privacy@invoiceflow.in">privacy@invoiceflow.in</a>. We aim to
+              respond within 30 days.</p>
+          </section>
+
+          <section class="doc-section" id="s7">
+            <h2>7. Data Retention</h2>
+            <p>We keep your account data and invoices while your account is active so you can continue using the product
+              without losing your records.</p>
+            <p>After you delete your account, we remove personal data and invoices within 30 days unless a longer
+              retention period is legally required.</p>
+            <p>Anonymized, aggregated product analytics that cannot identify you may be retained longer to help us
+              improve the service.</p>
+          </section>
+
+          <section class="doc-section full" id="s8">
+            <h2>8. Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy or how InvoiceFlow handles data, please reach out.
+            </p>
+            <div class="contact-card">
+              <p><strong>Privacy team</strong><br>Email: <a
+                  href="mailto:privacy@invoiceflow.in">privacy@invoiceflow.in</a><br>Location: Bengaluru, Karnataka,
+                India - 560001</p>
+              <a href="contact.html" class="btn btn-soft">Contact Support</a>
+            </div>
+            <div class="note-box">
+              <p>When this policy changes in a meaningful way, we update the date at the top of the page and may notify
+                you by email or in-product notice.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-inner">
+      <span class="foot-logo">InvoiceFlow</span>
+      <div class="foot-links">
+        <a href="index.html">Home</a>
+        <a href="help.html">Help</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+      <span class="foot-copy">&copy; 2026 InvoiceFlow. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/pages/privacy.js' %}"></script>
 </body>
+
 </html>
