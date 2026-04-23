@@ -1,0 +1,37 @@
+<div class="modal-overlay" id="loginModal" onclick="overlayClose(event,'login')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')" type="button">✕</button>
+    <h2>Welcome back</h2>
+    <p class="modal-sub">No account? <a onclick="switchModal('login','signup')">Register free →</a></p>
+    <div class="fg">
+      <label>Email Address</label>
+      <input type="email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="fg">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="f-submit" onclick="doAuth('login')" type="button">Sign In</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="signupModal" onclick="overlayClose(event,'signup')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signup')" type="button">✕</button>
+    <h2>Create account</h2>
+    <p class="modal-sub">Already registered? <a onclick="switchModal('signup','login')">Sign in →</a></p>
+    <div class="fg">
+      <label>Full Name</label>
+      <input type="text" placeholder="Riya Sharma" autocomplete="name" />
+    </div>
+    <div class="fg">
+      <label>Email Address</label>
+      <input type="email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="fg">
+      <label>Password</label>
+      <input type="password" placeholder="Create a strong password" autocomplete="new-password" />
+    </div>
+    <button class="f-submit" onclick="doAuth('signup')" type="button">Register Free →</button>
+  </div>
+</div>

@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/pages/terms.css' %}">
+        <link rel="stylesheet" href="{% static 'css/pages/auth-modals.css' %}">
 </head>
 
 <body>
@@ -18,29 +19,29 @@
     <div id="glow"></div>
 
     <nav id="nav">
-        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <a href="{% url 'home' %}" class="logo">Invoice<span>Flow</span></a>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="help.html">Help</a>
-            <a href="contact.html">Contact</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="terms.html" class="active">Terms</a>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'help' %}">Help</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'privacy' %}">Privacy</a>
+            <a href="{% url 'terms' %}" class="active">Terms</a>
         </div>
         <div class="nav-actions">
-            <a href="/login" class="btn btn-ghost">Sign In</a>
-            <a href="/register" class="btn btn-dark">Register Free</a>
+            <button class="btn btn-ghost" type="button" onclick="openModal('login')">Sign In</button>
+            <button class="btn btn-dark" type="button" onclick="openModal('signup')">Register Free</button>
         </div>
         <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </nav>
 
     <div class="mob-menu" id="mobMenu">
-        <a href="index.html" onclick="closeMob()">Home</a>
-        <a href="help.html" onclick="closeMob()">Help</a>
-        <a href="contact.html" onclick="closeMob()">Contact</a>
-        <a href="privacy.html" onclick="closeMob()">Privacy</a>
-        <a href="terms.html" onclick="closeMob()">Terms</a>
-        <a href="/login" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
-        <a href="/register" class="btn btn-dark" onclick="closeMob()">Register Free</a>
+        <a href="{% url 'home' %}" onclick="closeMob()">Home</a>
+        <a href="{% url 'help' %}" onclick="closeMob()">Help</a>
+        <a href="{% url 'contact' %}" onclick="closeMob()">Contact</a>
+        <a href="{% url 'privacy' %}" onclick="closeMob()">Privacy</a>
+        <a href="{% url 'terms' %}" onclick="closeMob()">Terms</a>
+        <button class="btn btn-ghost" type="button" onclick="closeMob(); openModal('login')">Sign In</button>
+        <button class="btn btn-dark" type="button" onclick="closeMob(); openModal('signup')">Register Free</button>
     </div>
 
     <header class="page-header">
@@ -50,7 +51,7 @@
         <div class="blob blob-1"></div>
         <div class="ph-inner">
             <nav class="breadcrumb" aria-label="Breadcrumb">
-                <a href="index.html">Home</a><span>/</span><span>Terms of Service</span>
+                <a href="{% url 'home' %}">Home</a><span>/</span><span>Terms of Service</span>
             </nav>
             <span class="tag">&#10022; Legal</span>
             <div class="hero-grid">
@@ -208,7 +209,7 @@
                             <p><strong>Legal team</strong><br>Email: <a
                                     href="mailto:legal@invoiceflow.in">legal@invoiceflow.in</a><br>Location: Bengaluru,
                                 Karnataka, India - 560001</p>
-                            <a href="contact.html" class="btn btn-terra">Get in Touch</a>
+                            <a href="{% url 'contact' %}" class="btn btn-terra">Get in Touch</a>
                         </div>
                         <div class="note-box">
                             <p>These terms are governed by the laws of India, with disputes subject to the courts of
@@ -224,15 +225,17 @@
         <div class="foot-inner">
             <span class="foot-logo">InvoiceFlow</span>
             <div class="foot-links">
-                <a href="index.html">Home</a>
-                <a href="help.html">Help</a>
-                <a href="contact.html">Contact</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="terms.html">Terms</a>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'help' %}">Help</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'privacy' %}">Privacy</a>
+                <a href="{% url 'terms' %}">Terms</a>
             </div>
             <span class="foot-copy">&copy; 2026 InvoiceFlow. All rights reserved.</span>
         </div>
     </footer>
+    {% include 'includes/auth_modals.html' %}
+    <script src="{% static 'js/pages/auth-modals.js' %}"></script>
     <script src="{% static 'js/pages/terms.js' %}"></script>
 </body>
 
