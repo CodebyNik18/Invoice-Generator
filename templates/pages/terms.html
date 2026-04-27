@@ -11,7 +11,6 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/pages/terms.css' %}">
-        <link rel="stylesheet" href="{% static 'css/pages/auth-modals.css' %}">
 </head>
 
 <body>
@@ -28,8 +27,8 @@
             <a href="{% url 'terms' %}" class="active">Terms</a>
         </div>
         <div class="nav-actions">
-            <button class="btn btn-ghost" type="button" onclick="openModal('login')">Sign In</button>
-            <button class="btn btn-dark" type="button" onclick="openModal('signup')">Register Free</button>
+            <a href="#" class="btn btn-ghost">Sign In</a>
+            <a href="#" class="btn btn-dark">Register Free</a>
         </div>
         <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </nav>
@@ -40,8 +39,8 @@
         <a href="{% url 'contact' %}" onclick="closeMob()">Contact</a>
         <a href="{% url 'privacy' %}" onclick="closeMob()">Privacy</a>
         <a href="{% url 'terms' %}" onclick="closeMob()">Terms</a>
-        <button class="btn btn-ghost" type="button" onclick="closeMob(); openModal('login')">Sign In</button>
-        <button class="btn btn-dark" type="button" onclick="closeMob(); openModal('signup')">Register Free</button>
+        <a href="#" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+        <a href="#" class="btn btn-dark" onclick="closeMob()">Register Free</a>
     </div>
 
     <header class="page-header">
@@ -234,9 +233,8 @@
             <span class="foot-copy">&copy; 2026 InvoiceFlow. All rights reserved.</span>
         </div>
     </footer>
-    {% include 'includes/auth_modals.html' %}
-    <script src="{% static 'js/pages/auth-modals.js' %}"></script>
     <script src="{% static 'js/pages/terms.js' %}"></script>
 </body>
 
 </html>
+

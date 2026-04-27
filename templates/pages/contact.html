@@ -11,7 +11,6 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/pages/contact.css' %}">
-        <link rel="stylesheet" href="{% static 'css/pages/auth-modals.css' %}">
 </head>
 
 <body>
@@ -28,8 +27,8 @@
             <a href="{% url 'contact' %}" class="active">Contact</a>
         </div>
         <div class="nav-actions">
-            <button class="btn btn-ghost" type="button" onclick="openModal('login')">Sign In</button>
-            <button class="btn btn-dark" type="button" onclick="openModal('signup')">Register Free</button>
+            <a href="#" class="btn btn-ghost">Sign In</a>
+            <a href="#" class="btn btn-dark">Register Free</a>
         </div>
         <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </nav>
@@ -39,8 +38,8 @@
         <a href="{% url 'home' %}#features" onclick="closeMob()">Features</a>
         <a href="{% url 'help' %}" onclick="closeMob()">Help</a>
         <a href="{% url 'contact' %}" onclick="closeMob()">Contact</a>
-        <button class="btn btn-ghost" type="button" onclick="closeMob(); openModal('login')">Sign In</button>
-        <button class="btn btn-dark" type="button" onclick="closeMob(); openModal('signup')">Register Free</button>
+        <a href="#" class="btn btn-ghost" onclick="closeMob()">Sign In</a>
+        <a href="#" class="btn btn-dark" onclick="closeMob()">Register Free</a>
     </div>
 
     <!-- PAGE HEADER -->
@@ -258,9 +257,8 @@
         Message sent! We'll reply within 24 hours.
     </div>
 
-    {% include 'includes/auth_modals.html' %}
-    <script src="{% static 'js/pages/auth-modals.js' %}"></script>
     <script src="{% static 'js/pages/contact.js' %}"></script>
 </body>
 
 </html>
+

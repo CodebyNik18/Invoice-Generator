@@ -25,8 +25,8 @@
       <a href="#how">How it Works</a>
     </div>
     <div class="nav-right">
-      <button class="btn btn-outline" onclick="openModal('login')">Sign In</button>
-      <button class="btn btn-solid" onclick="openModal('signup')">Register Free</button>
+      <a href="#" class="btn btn-outline">Sign In</a>
+      <a href="#" class="btn btn-solid">Register Free</a>
     </div>
     <button class="hamburger" id="burger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -37,9 +37,8 @@
   <div class="mobile-nav" id="mobileNav">
     <a href="#features" onclick="closeMobile()">Features</a>
     <a href="#how" onclick="closeMobile()">How it Works</a>
-    <button class="btn btn-outline" style="font-size:1rem" onclick="closeMobile();openModal('login')">Sign In</button>
-    <button class="btn btn-solid" style="font-size:1rem" onclick="closeMobile();openModal('signup')">Register
-      Free</button>
+    <a href="#" class="btn btn-outline" style="font-size:1rem" onclick="closeMobile()">Sign In</a>
+    <a href="#" class="btn btn-solid" style="font-size:1rem" onclick="closeMobile()">Register Free</a>
   </div>
 
   <!-- HERO -->
@@ -57,8 +56,8 @@
         <p class="hero-desc anim in">Generate professional invoices, download as PDF, and track every client transaction
           — all saved to your personal account.</p>
         <div class="hero-btns anim in">
-          <button class="btn btn-terra btn-lg" onclick="openModal('signup')">Start Creating →</button>
-          <button class="btn btn-outline btn-lg" onclick="openModal('login')">Sign In</button>
+          <a href="#" class="btn btn-terra btn-lg">Start Creating â†’</a>
+          <a href="#" class="btn btn-outline btn-lg">Sign In</a>
         </div>
         <div class="hero-stats anim in">
           <div class="stat"><span class="stat-n">12K+</span><span class="stat-l">Happy Users</span></div>
@@ -231,10 +230,11 @@
   <section class="cta-section">
     <h2>Ready to <i>get paid</i> faster?</h2>
     <p>Join thousands of freelancers and businesses — completely free, no credit card needed.</p>
+  </section>
+
     <div class="cta-btns">
-      <button class="btn btn-terra btn-lg" onclick="openModal('signup')">Create Free Account →</button>
-      <button class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)"
-        onclick="openModal('login')">Already have an account</button>
+      <a href="#" class="btn btn-terra btn-lg">Create Free Account â†’</a>
+      <a href="#" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)">Already have an account</a>
     </div>
   </section>
 
@@ -249,51 +249,6 @@
       <span>© 2026 InvoiceFlow. All rights reserved.</span>
     </div>
   </footer>
-
-  <!-- LOGIN MODAL -->
-  <form action="" method="post">
-    <div class="modal-overlay" id="loginModal" onclick="overlayClose(event,'login')">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal('login')">✕</button>
-        <h2>Welcome back</h2>
-        <p class="modal-sub">No account? <a onclick="switchModal('login','signup')">Register free →</a></p>
-        <div class="fg">
-          <label>Email Address</label>
-          <input type="email" placeholder="you@example.com" name="email" autocomplete="email" />
-        </div>
-        <div class="fg">
-          <label>Password</label>
-          <input type="password" placeholder="••••••••" name="password" autocomplete="current-password" />
-        </div>
-        <button class="f-submit" onclick="doAuth('login')">Sign In</button>
-      </div>
-    </div>
-  </form>
-
-  <!-- SIGNUP MODAL -->
-  <form action="" method="post">
-    {% csrf_token %}
-    <div class="modal-overlay" id="signupModal" onclick="overlayClose(event,'signup')">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal('signup')">✕</button>
-        <h2>Create account</h2>
-        <p class="modal-sub">Already registered? <a onclick="switchModal('signup','login')">Sign in →</a></p>
-        <div class="fg">
-          <label>Full Name</label>
-          <input type="text" placeholder="Riya Sharma" name="full_name" autocomplete="name" />
-        </div>
-        <div class="fg">
-          <label>Email Address</label>
-          <input type="email" placeholder="you@example.com" name="email" autocomplete="email" />
-        </div>
-        <div class="fg">
-          <label>Password</label>
-          <input type="password" placeholder="Create a strong password" name="password" autocomplete="new-password" />
-        </div>
-        <button class="f-submit" onclick="doAuth('signup')">Register Free →</button>
-      </div>
-    </div>
-  </form>
   <script src="{% static 'js/index.js' %}"></script>
 
 </body>

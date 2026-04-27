@@ -1,0 +1,817 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --mint: #e8f5ee;
+    --mint-mid: #b8dcc8;
+    --green: #4a9b6f;
+    --green-dark: #2e6b4a;
+    --peach: #fde8df;
+    --terra: #d4663a;
+    --terra-dark: #b34f26;
+    --cream: #faf8f3;
+    --warm: #f5f0e8;
+    --ink: #1a2e20;
+    --ink-60: rgba(26, 46, 32, .6);
+    --ink-30: rgba(26, 46, 32, .3);
+    --white: #fff;
+    --border: rgba(26, 46, 32, .1);
+    --pad: clamp(1.5rem, 5vw, 4.5rem);
+}
+
+html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ── cursor glow ── */
+#glow {
+    position: fixed;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74, 155, 111, .1) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: left .3s, top .3s;
+    z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--pad);
+    height: 66px;
+    background: rgba(250, 248, 243, .9);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow .35s;
+}
+
+nav.scrolled {
+    box-shadow: 0 4px 28px rgba(26, 46, 32, .08);
+}
+
+.logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--terra);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.btn {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .875rem;
+    font-weight: 600;
+    padding: .5rem 1.25rem;
+    border-radius: 100px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    transition: all .22s ease;
+    white-space: nowrap;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+}
+
+.btn-ghost:hover {
+    border-color: var(--green);
+    background: var(--mint);
+    color: var(--green-dark);
+}
+
+.btn-dark {
+    background: var(--ink);
+    color: var(--white);
+}
+
+.btn-dark:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+}
+
+.btn-terra {
+    background: var(--terra);
+    color: var(--white);
+}
+
+.btn-terra:hover {
+    background: var(--terra-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(212, 102, 58, .3);
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+    padding: .75rem 1.5rem;
+    font-size: .95rem;
+}
+
+/* ── PAGE LAYOUT ── */
+.page-wrap {
+    min-height: 100vh;
+    padding-top: 66px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* ── LEFT DECORATIVE PANEL ── */
+.deco-panel {
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3.5rem clamp(2rem, 4vw, 4rem);
+}
+
+/* decorative rings */
+.deco-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(184, 220, 200, .15);
+    pointer-events: none;
+    animation: ringPulse 7s ease-in-out infinite;
+}
+
+.dr1 {
+    width: 500px;
+    height: 500px;
+    top: -160px;
+    right: -160px;
+}
+
+.dr2 {
+    width: 320px;
+    height: 320px;
+    top: -80px;
+    right: -80px;
+    animation-delay: 1s;
+    border-color: rgba(74, 155, 111, .12);
+}
+
+.dr3 {
+    width: 160px;
+    height: 160px;
+    top: -10px;
+    right: -10px;
+    animation-delay: 2s;
+    border-color: rgba(74, 155, 111, .2);
+}
+
+.deco-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: blobFloat 10s ease-in-out infinite;
+}
+
+.db1 {
+    width: 360px;
+    height: 360px;
+    bottom: -120px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(74, 155, 111, .12) 0%, transparent 70%);
+    animation-delay: 2s;
+}
+
+.db2 {
+    width: 200px;
+    height: 200px;
+    top: 40%;
+    right: 5%;
+    background: radial-gradient(circle, rgba(212, 102, 58, .08) 0%, transparent 70%);
+    animation-delay: 4s;
+    animation-duration: 12s;
+}
+
+@keyframes ringPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: .5
+    }
+
+    50% {
+        transform: scale(1.06);
+        opacity: 1
+    }
+}
+
+@keyframes blobFloat {
+
+    0%,
+    100% {
+        transform: translateY(0)
+    }
+
+    50% {
+        transform: translateY(-20px)
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+.deco-content {
+    position: relative;
+    z-index: 2;
+}
+
+.deco-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    background: rgba(74, 155, 111, .15);
+    border: 1px solid rgba(74, 155, 111, .3);
+    color: var(--mint-mid);
+    padding: .28rem .8rem;
+    border-radius: 100px;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+}
+
+.deco-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+
+    50% {
+        opacity: .4;
+        transform: scale(1.5)
+    }
+}
+
+.deco-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--white);
+    letter-spacing: -.02em;
+    margin-bottom: 1rem;
+}
+
+.deco-title i {
+    color: rgba(184, 220, 200, .85);
+    font-style: italic;
+}
+
+.deco-sub {
+    font-size: .95rem;
+    color: rgba(255, 255, 255, .45);
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 340px;
+    margin-bottom: 2.4rem;
+}
+
+/* Feature bullets */
+.deco-features {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+.deco-feat {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.deco-feat-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: rgba(74, 155, 111, .15);
+    border: 1px solid rgba(74, 155, 111, .25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deco-feat-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.deco-feat span {
+    font-size: .86rem;
+    color: rgba(255, 255, 255, .6);
+    font-weight: 400;
+}
+
+/* Mini invoice card decoration */
+.deco-card {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .1);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem;
+    width: 200px;
+    z-index: 2;
+    animation: fadeUp .8s .5s ease both;
+}
+
+.dc-label {
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255, 255, 255, .35);
+    margin-bottom: .5rem;
+}
+
+.dc-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: .2rem;
+}
+
+.dc-sub {
+    font-size: .72rem;
+    color: rgba(255, 255, 255, .4);
+}
+
+.dc-badge {
+    display: inline-block;
+    background: rgba(74, 155, 111, .25);
+    color: var(--mint-mid);
+    font-size: .65rem;
+    font-weight: 700;
+    padding: .15rem .55rem;
+    border-radius: 100px;
+    margin-top: .5rem;
+}
+
+/* ── RIGHT: AUTH PANEL ── */
+.auth-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem clamp(1.5rem, 5vw, 4rem);
+    background: var(--cream);
+    position: relative;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 420px;
+    animation: fadeUp .6s ease both;
+}
+
+/* Tab switcher — Password / OTP */
+.auth-tabs {
+    display: flex;
+    background: var(--warm);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 1.8rem;
+    gap: 4px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: .5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--ink-60);
+    border-radius: 9px;
+    transition: all .22s;
+}
+
+.auth-tab.active {
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: 0 2px 8px rgba(26, 46, 32, .08);
+}
+
+.auth-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: .3rem;
+    letter-spacing: -.02em;
+}
+
+.auth-sub {
+    font-size: .87rem;
+    color: var(--ink-60);
+    margin-bottom: 1.8rem;
+}
+
+.auth-sub a {
+    color: var(--green-dark);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-sub a:hover {
+    text-decoration: underline;
+}
+
+/* Form */
+.field {
+    margin-bottom: 1rem;
+}
+
+.field label {
+    display: block;
+    font-size: .76rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: .38rem;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+}
+
+.field input {
+    width: 100%;
+    padding: .7rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .92rem;
+    color: var(--ink);
+    background: var(--white);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.field input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(74, 155, 111, .11);
+}
+
+.field input::placeholder {
+    color: var(--ink-30);
+}
+
+.field input.error {
+    border-color: var(--terra);
+}
+
+/* Password toggle wrapper */
+.pw-wrap {
+    position: relative;
+}
+
+.pw-wrap input {
+    padding-right: 2.8rem;
+}
+
+.pw-eye {
+    position: absolute;
+    right: .85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-30);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    transition: color .2s;
+}
+
+.pw-eye:hover {
+    color: var(--ink);
+}
+
+/* OTP box — 6 digit inputs */
+.otp-fields {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: .55rem;
+    margin-bottom: 1rem;
+}
+
+.otp-fields input {
+    width: 100%;
+    aspect-ratio: 1;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: .5rem .2rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--ink);
+    background: var(--white);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+    caret-color: var(--green);
+}
+
+.otp-fields input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(74, 155, 111, .11);
+    background: var(--mint);
+}
+
+.otp-fields input.filled {
+    border-color: var(--green-dark);
+    background: var(--mint);
+}
+
+/* OTP step panels — shown/hidden server-side OR via minimal JS class toggle */
+.otp-step {
+    display: none;
+}
+
+.otp-step.active {
+    display: block;
+}
+
+/* Resend timer */
+.resend-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+}
+
+.resend-timer {
+    font-size: .8rem;
+    color: var(--ink-60);
+}
+
+.resend-timer span {
+    font-weight: 700;
+    color: var(--green-dark);
+}
+
+/* Resend button — Django handles the POST, just needs the right name/value */
+.resend-btn {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    display: none;
+}
+
+.resend-btn.visible {
+    display: inline;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin: 1.2rem 0;
+    color: var(--ink-30);
+    font-size: .78rem;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* Google button */
+.btn-google {
+    width: 100%;
+    justify-content: center;
+    padding: .7rem 1rem;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    font-size: .88rem;
+}
+
+.btn-google:hover {
+    border-color: var(--green);
+    background: var(--mint);
+}
+
+/* Forgot password link */
+.forgot-link {
+    text-align: right;
+    margin-top: -.5rem;
+    margin-bottom: .9rem;
+}
+
+.forgot-link a {
+    font-size: .8rem;
+    color: var(--green-dark);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.forgot-link a:hover {
+    text-decoration: underline;
+}
+
+/* Error message strip */
+.error-strip {
+    background: var(--peach);
+    border: 1px solid rgba(212, 102, 58, .25);
+    border-radius: 10px;
+    padding: .65rem 1rem;
+    margin-bottom: 1rem;
+    font-size: .85rem;
+    color: var(--terra-dark);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* Success strip */
+.success-strip {
+    background: var(--mint);
+    border: 1px solid var(--mint-mid);
+    border-radius: 10px;
+    padding: .65rem 1rem;
+    margin-bottom: 1rem;
+    font-size: .85rem;
+    color: var(--green-dark);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* Hide these by default — Django renders them into the HTML when needed */
+.msg-strip {
+    display: none;
+}
+
+.msg-strip.show {
+    display: flex;
+}
+
+/* T&C note */
+.terms-note {
+    font-size: .75rem;
+    color: var(--ink-30);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.terms-note a {
+    color: var(--green-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.terms-note a:hover {
+    text-decoration: underline;
+}
+
+/* ── FOOTER ── */
+footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255, 255, 255, .05);
+    padding: 26px var(--pad);
+}
+
+.foot-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .8rem;
+}
+
+.foot-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, .55);
+}
+
+.foot-links {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.foot-links a {
+    font-size: .78rem;
+    color: rgba(255, 255, 255, .28);
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.foot-links a:hover {
+    color: var(--mint-mid);
+}
+
+.foot-copy {
+    font-size: .75rem;
+    color: rgba(255, 255, 255, .2);
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px) {
+    .page-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .deco-panel {
+        display: none;
+    }
+
+    .auth-panel {
+        padding: 2.5rem 1.5rem;
+        min-height: calc(100vh - 66px);
+    }
+}
+
+@media(max-width:420px) {
+    .otp-fields {
+        gap: .4rem;
+    }
+
+    .otp-fields input {
+        font-size: 1.1rem;
+    }
+}

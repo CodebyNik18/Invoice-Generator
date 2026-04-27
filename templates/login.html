@@ -1,11 +1,427 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In – InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
+
 <body>
-    <h1>Log In Page</h1>
+
+    <div id="glow"></div>
+
+    <!-- ── NAV ── -->
+    <nav id="nav">
+        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-right">
+            <span style="font-size:.85rem;color:var(--ink-60)">Don't have an account?</span>
+            <a href="register.html" class="btn btn-dark">Register Free</a>
+        </div>
+    </nav>
+
+
+    <!-- ── PAGE ── -->
+    <div class="page-wrap">
+
+        <!-- LEFT: decorative panel -->
+        <div class="deco-panel">
+            <div class="deco-ring dr1"></div>
+            <div class="deco-ring dr2"></div>
+            <div class="deco-ring dr3"></div>
+            <div class="deco-blob db1"></div>
+            <div class="deco-blob db2"></div>
+
+            <div class="deco-content">
+                <div class="deco-tag" style="animation:fadeUp .5s ease both">
+                    <span class="deco-dot"></span>Trusted by 12,000+ users
+                </div>
+                <h1 class="deco-title" style="animation:fadeUp .5s .08s ease both">
+                    Welcome <i>back</i> to<br>InvoiceFlow
+                </h1>
+                <p class="deco-sub" style="animation:fadeUp .5s .16s ease both">
+                    Sign in to access your invoice history, continue drafts, and get paid faster.
+                </p>
+
+                <div class="deco-features" style="animation:fadeUp .5s .24s ease both">
+                    <div class="deco-feat">
+                        <div class="deco-feat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--mint-mid)" stroke-width="1.8">
+                                <rect x="4" y="3" width="16" height="18" rx="2" />
+                                <path d="M8 7h8M8 11h8M8 15h5" />
+                            </svg>
+                        </div>
+                        <span>All your invoices saved in one place</span>
+                    </div>
+                    <div class="deco-feat">
+                        <div class="deco-feat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--mint-mid)" stroke-width="1.8">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <span>Secure login with OTP verification</span>
+                    </div>
+                    <div class="deco-feat">
+                        <div class="deco-feat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--mint-mid)" stroke-width="1.8">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                        </div>
+                        <span>One-click PDF download anytime</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini card decoration -->
+            <div class="deco-card">
+                <div class="dc-label">Last Invoice</div>
+                <div class="dc-num">₹59,000</div>
+                <div class="dc-sub">Acme Technologies · Apr 2026</div>
+                <span class="dc-badge">✓ Paid</span>
+            </div>
+        </div>
+
+
+        <!-- RIGHT: auth panel -->
+        <div class="auth-panel">
+            <div class="auth-box">
+
+                <h1 class="auth-heading">Sign in</h1>
+                <p class="auth-sub">New here? <a href="register.html">Create a free account →</a></p>
+
+                <!-- Tab switcher: Password login vs OTP login -->
+                <!-- 
+        Django tip: read ?method=otp or ?method=password from the URL
+        to set the active tab server-side. Or use a hidden input to
+        remember the last method.
+      -->
+                <div class="auth-tabs" role="tablist">
+                    <button class="auth-tab active" id="tabPassword" role="tab" aria-selected="true"
+                        aria-controls="panelPassword" type="button" onclick="switchTab('password')">
+                        Password
+                    </button>
+                    <button class="auth-tab" id="tabOtp" role="tab" aria-selected="false" aria-controls="panelOtp"
+                        type="button" onclick="switchTab('otp')">
+                        OTP / Passwordless
+                    </button>
+                </div>
+
+
+                <!-- ════════════════════════════
+           PANEL A: PASSWORD LOGIN
+           POST → /accounts/login/
+      ════════════════════════════ -->
+                <div id="panelPassword" role="tabpanel">
+
+                    <!--
+          Django renders this when form has errors:
+          <div class="error-strip show">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Invalid email or password. Please try again.
+          </div>
+        -->
+                    <div class="error-strip msg-strip" id="pwError">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        Invalid email or password. Please try again.
+                    </div>
+
+                    <form method="POST" action="/accounts/login/" novalidate id="passwordForm">
+                        <!-- CSRF: add {% csrf_token %} here -->
+                        <!-- Hidden field so Django view knows which form was submitted -->
+                        <input type="hidden" name="login_method" value="password">
+                        <input type="hidden" name="next" value="/dashboard/">
+
+                        <div class="field">
+                            <label for="pw_email">Email Address</label>
+                            <input type="email" id="pw_email" name="email" placeholder="you@example.com"
+                                autocomplete="email" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="pw_password">Password</label>
+                            <div class="pw-wrap">
+                                <input type="password" id="pw_password" name="password" placeholder="••••••••"
+                                    autocomplete="current-password" required>
+                                <button type="button" class="pw-eye" onclick="togglePw('pw_password', this)"
+                                    aria-label="Show password">
+                                    <svg id="eyeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.8">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="forgot-link">
+                            <a href="/accounts/password-reset/">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark btn-full">
+                            Sign In
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="divider">or</div>
+
+                    <!-- Google OAuth — action points to your Django allauth / social-auth URL -->
+                    <form method="POST" action="/accounts/google/login/">
+                        <!-- CSRF: add {% csrf_token %} here -->
+                        <input type="hidden" name="next" value="/dashboard/">
+                        <button type="submit" class="btn btn-google btn-full">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                    fill="#4285F4" />
+                                <path
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                    fill="#34A853" />
+                                <path
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                    fill="#FBBC05" />
+                                <path
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                    fill="#EA4335" />
+                            </svg>
+                            Continue with Google
+                        </button>
+                    </form>
+
+                </div><!-- /panelPassword -->
+
+
+                <!-- ════════════════════════════
+           PANEL B: OTP LOGIN
+           Two-step — Django controls
+           which step is visible via
+           the URL / session flag.
+
+           Step 1: user enters email  → POST /accounts/otp/request/
+           Step 2: user enters OTP    → POST /accounts/otp/verify/
+
+           JS only handles:
+           - switching between the 2 visual steps
+           - auto-focus / auto-advance OTP inputs
+           - countdown timer display (visual only)
+      ════════════════════════════ -->
+                <div id="panelOtp" style="display:none">
+
+                    <!-- STEP 1 — Enter email to receive OTP -->
+                    <!--
+          Django controls which step is shown:
+          If otp_sent == True in context → hide step1, show step2
+          Otherwise → show step1, hide step2
+
+          Use: class="otp-step active" or class="otp-step"
+        -->
+                    <div class="otp-step active" id="otpStep1">
+
+                        <div class="success-strip msg-strip" id="otpSentMsg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.1 11.83" />
+                                <polyline points="22 2 12 12" />
+                            </svg>
+                            OTP sent! Check your inbox.
+                        </div>
+
+                        <div class="error-strip msg-strip" id="otpEmailError">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            No account found with that email.
+                        </div>
+
+                        <form method="POST" action="/accounts/otp/request/" novalidate id="otpRequestForm">
+                            <!-- CSRF: add {% csrf_token %} here -->
+                            <input type="hidden" name="login_method" value="otp">
+
+                            <div class="field">
+                                <label for="otp_email">Email Address</label>
+                                <input type="email" id="otp_email" name="email" placeholder="you@example.com"
+                                    autocomplete="email" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-terra btn-full">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                Send OTP to my email
+                            </button>
+                        </form>
+
+                        <div class="divider">or</div>
+                        <form method="POST" action="/accounts/google/login/">
+                            <!-- CSRF: add {% csrf_token %} here -->
+                            <input type="hidden" name="next" value="/dashboard/">
+                            <button type="submit" class="btn btn-google btn-full">
+                                <svg width="18" height="18" viewBox="0 0 24 24">
+                                    <path
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                        fill="#4285F4" />
+                                    <path
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                        fill="#34A853" />
+                                    <path
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                        fill="#FBBC05" />
+                                    <path
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                        fill="#EA4335" />
+                                </svg>
+                                Continue with Google
+                            </button>
+                        </form>
+
+                    </div><!-- /otpStep1 -->
+
+
+                    <!-- STEP 2 — Enter the 6-digit OTP -->
+                    <!--
+          Django shows this step when:
+          - otp_sent == True (session flag set after step 1 POST)
+          - Pass the email back as a hidden field or in session
+        -->
+                    <div class="otp-step" id="otpStep2">
+
+                        <div class="success-strip msg-strip" id="otpStep2SentMsg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>OTP sent to <strong id="sentToEmail">your email</strong></span>
+                        </div>
+
+                        <div class="error-strip msg-strip" id="otpInvalidError">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            Incorrect or expired OTP. Please try again.
+                        </div>
+
+                        <form method="POST" action="/accounts/otp/verify/" novalidate id="otpVerifyForm">
+                            <!-- CSRF: add {% csrf_token %} here -->
+                            <input type="hidden" name="login_method" value="otp">
+                            <!--
+              Django passes the email from session — you can also render it
+              as a hidden field: <input type="hidden" name="email" value="{{ otp_email }}">
+            -->
+                            <input type="hidden" name="email" id="hiddenOtpEmail" value="">
+
+                            <div class="field">
+                                <label>Enter 6-digit OTP</label>
+                                <!--
+                Each input has name="otp_digit_N".
+                In your Django view, combine them:
+                  otp = ''.join([request.POST.get(f'otp_digit_{i}','') for i in range(1,7)])
+                OR use a single hidden input that JS fills:
+              -->
+                                <div class="otp-fields" id="otpFields">
+                                    <input type="text" name="otp_digit_1" id="otp1" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]" autocomplete="one-time-code">
+                                    <input type="text" name="otp_digit_2" id="otp2" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]">
+                                    <input type="text" name="otp_digit_3" id="otp3" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]">
+                                    <input type="text" name="otp_digit_4" id="otp4" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]">
+                                    <input type="text" name="otp_digit_5" id="otp5" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]">
+                                    <input type="text" name="otp_digit_6" id="otp6" maxlength="1" inputmode="numeric"
+                                        pattern="[0-9]">
+                                </div>
+                                <!-- Single combined hidden field — JS fills this from the 6 boxes above -->
+                                <input type="hidden" name="otp_code" id="otpCombined">
+                            </div>
+
+                            <!-- Countdown + resend -->
+                            <div class="resend-row">
+                                <span class="resend-timer">
+                                    Resend in <span id="countdown">60</span>s
+                                </span>
+                                <!-- Resend = a new POST to /accounts/otp/request/ with the same email -->
+                                <button type="button" class="resend-btn" id="resendBtn" onclick="resendOtp()">
+                                    Resend OTP
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark btn-full" id="otpVerifyBtn">
+                                Verify &amp; Sign In
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </button>
+                        </form>
+
+                        <div style="text-align:center; margin-top:1rem;">
+                            <button type="button" onclick="goBackToStep1()"
+                                style="font-size:.8rem;color:var(--ink-60);background:none;border:none;cursor:pointer;text-decoration:underline;">
+                                ← Use a different email
+                            </button>
+                        </div>
+
+                    </div><!-- /otpStep2 -->
+
+                </div><!-- /panelOtp -->
+
+                <p class="terms-note">
+                    By signing in you agree to our
+                    <a href="terms.html">Terms of Service</a> and
+                    <a href="privacy.html">Privacy Policy</a>.
+                </p>
+
+            </div><!-- /auth-box -->
+        </div><!-- /auth-panel -->
+
+    </div><!-- /page-wrap -->
+
+
+    <!-- ── FOOTER ── -->
+    <footer>
+        <div class="foot-inner">
+            <span class="foot-logo">InvoiceFlow</span>
+            <div class="foot-links">
+                <a href="index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            <span class="foot-copy">© 2026 InvoiceFlow. All rights reserved.</span>
+        </div>
+    </footer>
+    <script src="{% static 'js/login.js' %}"></script>
+
 </body>
+
 </html>

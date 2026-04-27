@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Invoice – InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --mint: #e8f5ee;
+            --mint-mid: #b8dcc8;
+            --green: #4a9b6f;
+            --green-dark: #2e6b4a;
+            --peach: #fde8df;
+            --terra: #d4663a;
+            --terra-dark: #b34f26;
+            --cream: #faf8f3;
+            --warm: #f5f0e8;
+            --ink: #1a2e20;
+            --ink-60: rgba(26, 46, 32, .6);
+            --ink-30: rgba(26, 46, 32, .3);
+            --ink-10: rgba(26, 46, 32, .07);
+            --white: #fff;
+            --border: rgba(26, 46, 32, .1);
+            --pad: clamp(1rem, 3vw, 2.5rem);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--warm);
+            color: var(--ink);
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* ── NAVBAR ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--pad);
+            height: 60px;
+            background: rgba(250, 248, 243, .92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow .3s;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 24px rgba(26, 46, 32, .08);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--terra);
+        }
+
+        .nav-mid {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-mid a {
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--ink-60);
+            text-decoration: none;
+            transition: color .2s;
+            white-space: nowrap;
+        }
+
+        .nav-mid a:hover {
+            color: var(--ink);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        /* Progress steps */
+        .steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--ink-30);
+            padding: 0 .8rem;
+            position: relative;
+        }
+
+        .step.active {
+            color: var(--green-dark);
+        }
+
+        .step.done {
+            color: var(--ink-60);
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .7rem;
+            font-weight: 700;
+            transition: all .3s;
+        }
+
+        .step.active .step-num {
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(74, 155, 111, .35);
+        }
+
+        .step.done .step-num {
+            background: var(--ink-60);
+            color: #fff;
+        }
+
+        .step-sep {
+            width: 28px;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .btn {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .82rem;
+            font-weight: 600;
+            padding: .42rem 1.1rem;
+            border-radius: 100px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            transition: all .22s;
+            white-space: nowrap;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--ink);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--green);
+            background: var(--mint);
+            color: var(--green-dark);
+        }
+
+        .btn-dark {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .btn-dark:hover {
+            background: var(--green-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-terra {
+            background: var(--terra);
+            color: #fff;
+        }
+
+        .btn-terra:hover {
+            background: var(--terra-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(212, 102, 58, .3);
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-green:hover {
+            background: var(--green-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(74, 155, 111, .3);
+        }
+
+        .btn-sm {
+            padding: .36rem .85rem;
+            font-size: .78rem;
+        }
+
+        .btn-icon {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border-radius: 8px;
+            justify-content: center;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .app {
+            display: flex;
+            height: 100vh;
+            padding-top: 60px;
+        }
+
+        /* LEFT PANEL - Form */
+        .panel-form {
+            width: 52%;
+            min-width: 420px;
+            max-width: 680px;
+            background: var(--cream);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* scrollbar */
+        .panel-form::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .panel-form::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-form::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* RIGHT PANEL - Preview */
+        .panel-preview {
+            flex: 1;
+            background: var(--warm);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        .panel-preview::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .panel-preview::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-preview::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* Preview label */
+        .preview-label {
+            font-size: .7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--ink-30);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .preview-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .5;
+                transform: scale(1.4)
+            }
+        }
+
+        /* ── FORM SECTIONS ── */
+        .form-section {
+            padding: 1.4rem var(--pad);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .fs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .fs-title {
+            font-size: .78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--ink-60);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .fs-title-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: var(--mint);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fs-title-icon svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        .fs-toggle {
+            color: var(--ink-30);
+            font-size: .9rem;
+            transition: transform .25s;
+        }
+
+        .fs-body {
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+        }
+
+        .fs-body.collapsed {
+            display: none;
+        }
+
+        /* form rows */
+        .frow {
+            display: grid;
+            gap: .7rem;
+        }
+
+        .frow-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .frow-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* field */
+        .f {
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+        }
+
+        .f label {
+            font-size: .72rem;
+            font-weight: 600;
+            color: var(--ink-60);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .f input,
+        .f select,
+        .f textarea {
+            width: 100%;
+            padding: .6rem .85rem;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .87rem;
+            color: var(--ink);
+            background: var(--white);
+            outline: none;
+            appearance: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .f select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231a2e20' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right .85rem center;
+            padding-right: 2.2rem;
+        }
+
+        .f textarea {
+            resize: vertical;
+            min-height: 70px;
+            line-height: 1.55;
+        }
+
+        .f input:focus,
+        .f select:focus,
+        .f textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(74, 155, 111, .1);
+        }
+
+        .f input::placeholder,
+        .f textarea::placeholder {
+            color: var(--ink-30);
+            font-size: .85rem;
+        }
+
+        /* Logo upload */
+        .logo-upload {
+            width: 90px;
+            height: 90px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+            cursor: pointer;
+            background: var(--warm);
+            transition: all .25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-upload:hover {
+            border-color: var(--green);
+            background: var(--mint);
+        }
+
+        .logo-upload input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .logo-upload span {
+            font-size: .68rem;
+            color: var(--ink-30);
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.3;
+            pointer-events: none;
+        }
+
+        .logo-upload svg {
+            pointer-events: none;
+        }
+
+        #logoPreview {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        /* ── LINE ITEMS ── */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items-table thead tr {
+            background: var(--ink);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .items-table th {
+            font-size: .68rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .75);
+            padding: .5rem .65rem;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .items-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .items-table th:last-child {
+            border-radius: 0 8px 8px 0;
+            text-align: center;
+        }
+
+        .items-table td {
+            padding: .4rem .35rem;
+            vertical-align: middle;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .items-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .item-desc input {
+            width: 100%;
+        }
+
+        .item-num input {
+            width: 100%;
+            text-align: right;
+        }
+
+        .item-amount {
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--ink);
+            text-align: right;
+            white-space: nowrap;
+            padding-right: .4rem !important;
+        }
+
+        .del-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--ink-30);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: background .2s, color .2s;
+        }
+
+        .del-btn:hover {
+            background: var(--peach);
+            color: var(--terra);
+        }
+
+        .add-item-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--green-dark);
+            background: transparent;
+            border: 1.5px dashed var(--mint-mid);
+            padding: .45rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .22s;
+            margin-top: .6rem;
+        }
+
+        .add-item-btn:hover {
+            background: var(--mint);
+            border-color: var(--green);
+        }
+
+        /* ── TOTALS ── */
+        .totals-block {
+            display: flex;
+            flex-direction: column;
+            gap: .55rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .87rem;
+        }
+
+        .total-row .label {
+            color: var(--ink-60);
+        }
+
+        .total-row .value {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .total-row.discount .value {
+            color: var(--terra);
+        }
+
+        .total-divider {
+            height: 1px;
+            background: var(--border);
+            margin: .3rem 0;
+        }
+
+        .grand-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--ink);
+            color: #fff;
+            padding: .75rem 1rem;
+            border-radius: 10px;
+            margin-top: .4rem;
+        }
+
+        .grand-total .label {
+            font-size: .82rem;
+            font-weight: 500;
+            opacity: .7;
+        }
+
+        .grand-total .value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        /* inline tax/disc inputs */
+        .inline-input {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .inline-input input {
+            width: 60px;
+            padding: .35rem .5rem;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: .82rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--ink);
+            background: var(--white);
+            outline: none;
+            text-align: center;
+            transition: border-color .2s;
+        }
+
+        .inline-input input:focus {
+            border-color: var(--green);
+        }
+
+        .inline-input span {
+            font-size: .8rem;
+            color: var(--ink-30);
+        }
+
+        /* action bar */
+        .action-bar {
+            padding: 1.1rem var(--pad);
+            border-top: 1px solid var(--border);
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .7rem;
+            flex-wrap: wrap;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .action-left {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+
+        .action-right {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+
+        .save-status {
+            font-size: .75rem;
+            color: var(--ink-30);
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+        }
+
+        .save-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        /* ── INVOICE PREVIEW ── */
+        .invoice-sheet {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(26, 46, 32, .04), 0 20px 60px rgba(26, 46, 32, .1);
+            padding: 2.8rem 2.6rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            animation: sheetIn .5s ease both;
+        }
+
+        @keyframes sheetIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .inv-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .inv-logo-box {
+            width: 72px;
+            height: 72px;
+            border: 1.5px dashed rgba(26, 46, 32, .15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .inv-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        .inv-logo-placeholder {
+            font-size: .6rem;
+            color: rgba(26, 46, 32, .25);
+            text-align: center;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .inv-header-right {
+            text-align: right;
+        }
+
+        .inv-word {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: -.02em;
+            line-height: 1;
+        }
+
+        .inv-num {
+            font-size: .75rem;
+            color: rgba(26, 46, 32, .45);
+            margin-top: .15rem;
+            font-weight: 500;
+        }
+
+        .inv-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .inv-meta-block strong {
+            display: block;
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: rgba(26, 46, 32, .35);
+            margin-bottom: .3rem;
+            font-weight: 700;
+        }
+
+        .inv-meta-block p {
+            font-size: .82rem;
+            color: var(--ink);
+            line-height: 1.55;
+            white-space: pre-wrap;
+        }
+
+        .inv-dates {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .8rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .inv-date-item {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: .6rem .85rem;
+        }
+
+        .inv-date-item .dl {
+            font-size: .62rem;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: rgba(26, 46, 32, .35);
+            font-weight: 700;
+            margin-bottom: .15rem;
+        }
+
+        .inv-date-item .dv {
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        /* preview table */
+        .inv-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .inv-table thead tr {
+            background: var(--ink);
+        }
+
+        .inv-table th {
+            font-size: .62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: rgba(255, 255, 255, .7);
+            padding: .55rem .7rem;
+            text-align: left;
+        }
+
+        .inv-table th:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+
+        .inv-table th:last-child {
+            border-radius: 0 6px 6px 0;
+            text-align: right;
+        }
+
+        .inv-table td {
+            font-size: .8rem;
+            color: rgba(26, 46, 32, .7);
+            padding: .55rem .7rem;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .inv-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .inv-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* preview totals */
+        .inv-totals {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .inv-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: .32rem 0;
+            font-size: .82rem;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .inv-total-row:last-child {
+            border-bottom: none;
+        }
+
+        .inv-total-row .tl {
+            color: rgba(26, 46, 32, .5);
+        }
+
+        .inv-total-row .tv {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .inv-total-row.disc .tv {
+            color: var(--terra);
+        }
+
+        .inv-grand {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--ink);
+            color: #fff;
+            padding: .85rem 1rem;
+            border-radius: 9px;
+            margin-top: .7rem;
+        }
+
+        .inv-grand .gl {
+            font-size: .75rem;
+            opacity: .65;
+            font-weight: 500;
+        }
+
+        .inv-grand .gv {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .inv-footer-notes {
+            margin-top: 1.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .inv-notes-label {
+            font-size: .62rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: rgba(26, 46, 32, .35);
+            font-weight: 700;
+            margin-bottom: .4rem;
+        }
+
+        .inv-notes-text {
+            font-size: .8rem;
+            color: rgba(26, 46, 32, .55);
+            line-height: 1.6;
+        }
+
+        .inv-terms-text {
+            font-size: .78rem;
+            color: rgba(26, 46, 32, .45);
+            line-height: 1.6;
+            margin-top: .6rem;
+        }
+
+        .inv-stamp {
+            position: absolute;
+            bottom: 2.6rem;
+            right: 2.6rem;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid var(--green);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .58rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            text-align: center;
+            line-height: 1.25;
+            transform: rotate(-18deg);
+            opacity: 0;
+            transition: opacity .4s;
+        }
+
+        .inv-stamp.show {
+            opacity: 1;
+        }
+
+        /* preview action bar */
+        .preview-actions {
+            display: flex;
+            gap: .6rem;
+            margin-top: 1.4rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            z-index: 9999;
+            background: var(--ink);
+            color: #fff;
+            padding: .75rem 1.4rem;
+            border-radius: 100px;
+            font-size: .85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            box-shadow: 0 8px 32px rgba(26, 46, 32, .2);
+            opacity: 0;
+            transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-icon {
+            width: 18px;
+            height: 18px;
+            background: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ── MOBILE TAB BAR ── */
+        .mob-tabs {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+            background: var(--cream);
+            border-top: 1px solid var(--border);
+        }
+
+        .mob-tabs button {
+            flex: 1;
+            padding: .7rem .5rem;
+            border: none;
+            background: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--ink-60);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            transition: color .2s;
+        }
+
+        .mob-tabs button.active {
+            color: var(--green-dark);
+        }
+
+        .mob-tabs button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Burger / mobile nav */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .burger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--ink);
+            border-radius: 2px;
+            transition: all .3s;
+        }
+
+        .burger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .burger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) {
+
+            .nav-mid,
+            .steps {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .app {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .panel-form {
+                width: 100%;
+                max-width: 100%;
+                min-width: unset;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                overflow-y: visible;
+            }
+
+            .panel-preview {
+                padding: 1.5rem 1rem 5rem;
+            }
+
+            .panel-form.mob-hidden,
+            .panel-preview.mob-hidden {
+                display: none;
+            }
+
+            .mob-tabs {
+                display: flex;
+            }
+        }
+
+        @media(max-width:520px) {
+
+            .frow-2,
+            .frow-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .invoice-sheet {
+                padding: 1.8rem 1.4rem;
+            }
+
+            .inv-meta {
+                grid-template-columns: 1fr;
+                gap: .9rem;
+            }
+
+            .inv-dates {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Currency symbol in amount cells */
+        .cur {
+            color: var(--ink-30);
+            font-size: .78rem;
+            margin-right: .1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-mid">
+            <div class="steps">
+                <div class="step done"><span class="step-num">✓</span> Account</div>
+                <div class="step-sep"></div>
+                <div class="step active"><span class="step-num">2</span> Create</div>
+                <div class="step-sep"></div>
+                <div class="step"><span class="step-num">3</span> Download</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="/dashboard" class="btn btn-ghost btn-sm">My Invoices</a>
+            <button class="btn btn-green btn-sm" onclick="downloadPDF()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download PDF
+            </button>
+            <button class="burger" id="burger"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- APP -->
+    <div class="app" id="app">
+
+        <!-- ══ LEFT: FORM PANEL ══ -->
+        <div class="panel-form" id="panelForm">
+
+            <!-- 1. FROM -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg></div>
+                        Your Business Details
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <div style="display:flex;gap:1rem;align-items:flex-start">
+                        <div class="logo-upload" id="logoUpload" title="Click to upload logo">
+                            <input type="file" accept="image/*" onchange="uploadLogo(this)" />
+                            <img id="logoPreview" alt="logo" />
+                            <svg id="logoIcon" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                stroke="var(--ink-30)" stroke-width="1.6">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                            <span id="logoText">Add Logo</span>
+                        </div>
+                        <div class="f" style="flex:1">
+                            <label>Business / Your Name</label>
+                            <input type="text" id="fromName" placeholder="Riya Sharma Design Studio"
+                                oninput="update()" />
+                            <textarea id="fromAddr"
+                                placeholder="123 MG Road, Bengaluru&#10;Karnataka, India 560001&#10;GSTIN: 29XXXXX"
+                                rows="3" oninput="update()" style="margin-top:.5rem"></textarea>
+                        </div>
+                    </div>
+                    <div class="frow frow-2">
+                        <div class="f"><label>Email</label><input type="email" id="fromEmail"
+                                placeholder="riya@studio.in" oninput="update()" /></div>
+                        <div class="f"><label>Phone</label><input type="tel" id="fromPhone"
+                                placeholder="+91 98765 43210" oninput="update()" /></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. TO -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg></div>
+                        Bill To (Client)
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <div class="frow frow-2">
+                        <div class="f"><label>Client Name</label><input type="text" id="toName"
+                                placeholder="Acme Technologies" oninput="update()" /></div>
+                        <div class="f"><label>Client Email</label><input type="email" id="toEmail"
+                                placeholder="billing@acme.com" oninput="update()" /></div>
+                    </div>
+                    <div class="f"><label>Address</label><textarea id="toAddr"
+                            placeholder="456 Bandra Kurla Complex&#10;Mumbai, Maharashtra 400051" rows="2"
+                            oninput="update()"></textarea></div>
+                </div>
+            </div>
+
+            <!-- 3. INVOICE DETAILS -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <rect x="4" y="3" width="16" height="18" rx="2" />
+                                <line x1="8" y1="7" x2="16" y2="7" />
+                                <line x1="8" y1="11" x2="16" y2="11" />
+                                <line x1="8" y1="15" x2="12" y2="15" />
+                            </svg></div>
+                        Invoice Details
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <div class="frow frow-3">
+                        <div class="f"><label>Invoice #</label><input type="text" id="invNum" value="INV-2026-001"
+                                oninput="update()" /></div>
+                        <div class="f"><label>Date</label><input type="date" id="invDate" oninput="update()" /></div>
+                        <div class="f"><label>Due Date</label><input type="date" id="invDue" oninput="update()" /></div>
+                    </div>
+                    <div class="frow frow-2">
+                        <div class="f"><label>Currency</label>
+                            <select id="currency" onchange="update()">
+                                <option value="₹">₹ Indian Rupee (INR)</option>
+                                <option value="$">$ US Dollar (USD)</option>
+                                <option value="€">€ Euro (EUR)</option>
+                                <option value="£">£ British Pound (GBP)</option>
+                                <option value="¥">¥ Japanese Yen (JPY)</option>
+                                <option value="AED">AED Dirham</option>
+                            </select>
+                        </div>
+                        <div class="f"><label>PO Number (optional)</label><input type="text" id="poNum"
+                                placeholder="PO-8821" oninput="update()" /></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. LINE ITEMS -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6" />
+                                <line x1="8" y1="12" x2="21" y2="12" />
+                                <line x1="8" y1="18" x2="21" y2="18" />
+                                <line x1="3" y1="6" x2="3.01" y2="6" />
+                                <line x1="3" y1="12" x2="3.01" y2="12" />
+                                <line x1="3" y1="18" x2="3.01" y2="18" />
+                            </svg></div>
+                        Line Items
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">Description</th>
+                                <th style="width:14%;text-align:right">Qty</th>
+                                <th style="width:18%;text-align:right">Rate</th>
+                                <th style="width:18%;text-align:right">Amount</th>
+                                <th style="width:10%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsBody"></tbody>
+                    </table>
+                    <button class="add-item-btn" onclick="addItem()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Line Item
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. TOTALS -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23" />
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg></div>
+                        Tax, Discount & Totals
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <div class="totals-block">
+                        <div class="total-row">
+                            <span class="label">Subtotal</span>
+                            <span class="value" id="fSubtotal">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span class="label" style="display:flex;align-items:center;gap:.5rem">
+                                Tax
+                                <div class="inline-input">
+                                    <input type="number" id="taxRate" value="18" min="0" max="100" step="0.5"
+                                        oninput="update()" />
+                                    <span>%</span>
+                                </div>
+                            </span>
+                            <span class="value" id="fTax">₹0.00</span>
+                        </div>
+                        <div class="total-row discount">
+                            <span class="label" style="display:flex;align-items:center;gap:.5rem">
+                                Discount
+                                <div class="inline-input">
+                                    <input type="number" id="discRate" value="0" min="0" max="100" step="0.5"
+                                        oninput="update()" />
+                                    <span>%</span>
+                                </div>
+                            </span>
+                            <span class="value" id="fDisc" style="color:var(--terra)">-₹0.00</span>
+                        </div>
+                        <div class="total-divider"></div>
+                        <div class="grand-total">
+                            <span class="label">Total Due</span>
+                            <span class="value" id="fTotal">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. NOTES & TERMS -->
+            <div class="form-section">
+                <div class="fs-header" onclick="toggleSection(this)">
+                    <div class="fs-title">
+                        <div class="fs-title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)"
+                                stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg></div>
+                        Notes & Terms
+                    </div>
+                    <span class="fs-toggle">▾</span>
+                </div>
+                <div class="fs-body">
+                    <div class="f"><label>Notes (visible on invoice)</label><textarea id="notes"
+                            placeholder="Thank you for your business! Payment via UPI, NEFT, or bank transfer." rows="2"
+                            oninput="update()"></textarea></div>
+                    <div class="f"><label>Terms & Conditions</label><textarea id="terms"
+                            placeholder="Payment due within 30 days. Late payments attract 1.5% monthly interest. All prices inclusive of applicable taxes."
+                            rows="2" oninput="update()"></textarea></div>
+                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="action-bar">
+                <div class="action-left">
+                    <button class="btn btn-ghost btn-sm" onclick="clearForm()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <polyline points="1 4 1 10 7 10" />
+                            <path d="M3.51 15a9 9 0 1 0 .49-4" />
+                        </svg>
+                        Reset
+                    </button>
+                    <span class="save-status"><span class="save-dot"></span>Auto-saved</span>
+                </div>
+                <div class="action-right">
+                    <button class="btn btn-dark btn-sm" onclick="saveDraft()">Save Draft</button>
+                    <button class="btn btn-terra btn-sm" onclick="downloadPDF()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- /panel-form -->
+
+        <!-- ══ RIGHT: PREVIEW PANEL ══ -->
+        <div class="panel-preview" id="panelPreview">
+            <div class="preview-label"><span class="preview-dot"></span>Live Preview</div>
+
+            <div class="invoice-sheet" id="invoiceSheet">
+
+                <div class="inv-top">
+                    <div class="inv-logo-box" id="prevLogoBox">
+                        <img id="prevLogo" src="" alt="logo" />
+                        <div class="inv-logo-placeholder">Your<br>Logo</div>
+                    </div>
+                    <div class="inv-header-right">
+                        <div class="inv-word">INVOICE</div>
+                        <div class="inv-num" id="prevNum">#INV-2026-001</div>
+                    </div>
+                </div>
+
+                <div class="inv-meta">
+                    <div class="inv-meta-block">
+                        <strong>From</strong>
+                        <p id="prevFrom" style="color:rgba(26,46,32,.4);font-style:italic;font-size:.78rem">Your
+                            business details</p>
+                    </div>
+                    <div class="inv-meta-block">
+                        <strong>Bill To</strong>
+                        <p id="prevTo" style="color:rgba(26,46,32,.4);font-style:italic;font-size:.78rem">Client details
+                        </p>
+                    </div>
+                </div>
+
+                <div class="inv-dates">
+                    <div class="inv-date-item">
+                        <div class="dl">Invoice Date</div>
+                        <div class="dv" id="prevDate">—</div>
+                    </div>
+                    <div class="inv-date-item">
+                        <div class="dl">Due Date</div>
+                        <div class="dv" id="prevDue">—</div>
+                    </div>
+                    <div class="inv-date-item" id="prevPoWrap" style="display:none">
+                        <div class="dl">PO Number</div>
+                        <div class="dv" id="prevPo">—</div>
+                    </div>
+                </div>
+
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th style="text-align:right">Qty</th>
+                            <th style="text-align:right">Rate</th>
+                            <th style="text-align:right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prevItems"></tbody>
+                </table>
+
+                <div style="display:flex;justify-content:flex-end">
+                    <div class="inv-totals" style="min-width:220px">
+                        <div class="inv-total-row"><span class="tl">Subtotal</span><span class="tv"
+                                id="prevSubtotal">₹0.00</span></div>
+                        <div class="inv-total-row"><span class="tl" id="prevTaxLabel">Tax (18%)</span><span class="tv"
+                                id="prevTax">₹0.00</span></div>
+                        <div class="inv-total-row disc" id="prevDiscRow" style="display:none"><span class="tl"
+                                id="prevDiscLabel">Discount (0%)</span><span class="tv" id="prevDisc">-₹0.00</span>
+                        </div>
+                        <div class="inv-grand"><span class="gl">Total Due</span><span class="gv"
+                                id="prevTotal">₹0.00</span></div>
+                    </div>
+                </div>
+
+                <div class="inv-footer-notes" id="prevNotesWrap" style="display:none">
+                    <div class="inv-notes-label">Notes</div>
+                    <div class="inv-notes-text" id="prevNotes"></div>
+                    <div class="inv-terms-text" id="prevTerms"></div>
+                </div>
+
+                <div class="inv-stamp" id="prevStamp">PAID</div>
+            </div>
+
+            <div class="preview-actions">
+                <button class="btn btn-green" style="flex:1;justify-content:center" onclick="downloadPDF()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download PDF
+                </button>
+                <button class="btn btn-ghost" onclick="printInvoice()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9" />
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <rect x="6" y="14" width="12" height="8" />
+                    </svg>
+                    Print
+                </button>
+                <button class="btn btn-ghost" onclick="copyLink()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    Copy Link
+                </button>
+            </div>
+        </div><!-- /panel-preview -->
+
+    </div><!-- /app -->
+
+    <!-- Mobile Tab Bar -->
+    <div class="mob-tabs" id="mobTabs">
+        <button class="active" id="tabForm" onclick="showTab('form')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="3" width="16" height="18" rx="2" />
+                <line x1="8" y1="7" x2="16" y2="7" />
+                <line x1="8" y1="11" x2="16" y2="11" />
+                <line x1="8" y1="15" x2="12" y2="15" />
+            </svg>
+            Edit
+        </button>
+        <button id="tabPreview" onclick="showTab('preview')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            Preview
+        </button>
+        <button onclick="downloadPDF()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download
+        </button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg></span>
+        <span id="toastMsg">Done!</span>
+    </div>
+
+    <script>
+        /* ─────────────────────────────────────────────
+           STATE
+        ───────────────────────────────────────────── */
+        let items = [];
+        let itemId = 0;
+
+        /* ─────────────────────────────────────────────
+           INIT
+        ───────────────────────────────────────────── */
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set today's date and due date (+30 days)
+            const today = new Date();
+            const due = new Date(); due.setDate(due.getDate() + 30);
+            document.getElementById('invDate').value = fmt(today);
+            document.getElementById('invDue').value = fmt(due);
+
+            // Load from localStorage if available
+            const saved = localStorage.getItem('invoiceflow_draft');
+            if (saved) {
+                try { restoreState(JSON.parse(saved)); }
+                catch (e) { /* fresh start */ }
+            }
+
+            // Start with 2 blank items
+            if (items.length === 0) { addItem(); addItem(); }
+
+            update();
+
+            // Nav scroll
+            window.addEventListener('scroll', () => {
+                document.getElementById('nav').classList.toggle('scrolled', scrollY > 5);
+            }, { passive: true });
+        });
+
+        function fmt(d) {
+            return d.toISOString().split('T')[0];
+        }
+
+        /* ─────────────────────────────────────────────
+           SECTION TOGGLE
+        ───────────────────────────────────────────── */
+        function toggleSection(header) {
+            const body = header.nextElementSibling;
+            const arrow = header.querySelector('.fs-toggle');
+            const collapsed = body.classList.toggle('collapsed');
+            arrow.style.transform = collapsed ? 'rotate(-90deg)' : '';
+        }
+
+        /* ─────────────────────────────────────────────
+           LINE ITEMS
+        ───────────────────────────────────────────── */
+        function addItem() {
+            const id = ++itemId;
+            items.push({ id, desc: '', qty: 1, rate: 0 });
+            renderItems();
+        }
+
+        function removeItem(id) {
+            items = items.filter(i => i.id !== id);
+            renderItems();
+            update();
+        }
+
+        function renderItems() {
+            const tbody = document.getElementById('itemsBody');
+            tbody.innerHTML = '';
+            items.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+      <td class="item-desc">
+        <input type="text" placeholder="Service or product description"
+          value="${esc(item.desc)}"
+          oninput="itemChange(${item.id},'desc',this.value)"
+          style="width:100%"/>
+      </td>
+      <td class="item-num">
+        <input type="number" value="${item.qty}" min="0" step="0.5"
+          oninput="itemChange(${item.id},'qty',this.value)"
+          style="width:100%;text-align:right"/>
+      </td>
+      <td class="item-num">
+        <input type="number" value="${item.rate}" min="0"
+          oninput="itemChange(${item.id},'rate',this.value)"
+          style="width:100%;text-align:right"/>
+      </td>
+      <td class="item-amount">${getCur()}${num(item.qty * item.rate)}</td>
+      <td style="text-align:center">
+        <button class="del-btn" onclick="removeItem(${item.id})">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </button>
+      </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function itemChange(id, field, val) {
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+            if (field === 'desc') item.desc = val;
+            else item[field] = parseFloat(val) || 0;
+            update();
+        }
+
+        /* ─────────────────────────────────────────────
+           UPDATE PREVIEW
+        ───────────────────────────────────────────── */
+        function update() {
+            const cur = getCur();
+            const subtotal = items.reduce((s, i) => s + i.qty * i.rate, 0);
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const discRate = parseFloat(document.getElementById('discRate').value) || 0;
+            const tax = subtotal * taxRate / 100;
+            const disc = subtotal * discRate / 100;
+            const total = subtotal + tax - disc;
+
+            // Form totals
+            document.getElementById('fSubtotal').textContent = cur + num(subtotal);
+            document.getElementById('fTax').textContent = cur + num(tax);
+            document.getElementById('fDisc').textContent = '-' + cur + num(disc);
+            document.getElementById('fTotal').textContent = cur + num(total);
+
+            // ── PREVIEW ──
+            // From
+            const fromName = v('fromName'), fromAddr = v('fromAddr'), fromEmail = v('fromEmail'), fromPhone = v('fromPhone');
+            const fromLines = [fromName, fromAddr, fromEmail, fromPhone].filter(Boolean).join('\n');
+            const prevFrom = document.getElementById('prevFrom');
+            if (fromLines) { prevFrom.textContent = fromLines; prevFrom.style.color = ''; prevFrom.style.fontStyle = ''; prevFrom.style.fontSize = ''; }
+            else { prevFrom.textContent = 'Your business details'; prevFrom.style.color = 'rgba(26,46,32,.4)'; prevFrom.style.fontStyle = 'italic'; prevFrom.style.fontSize = '.78rem'; }
+
+            // To
+            const toName = v('toName'), toAddr = v('toAddr'), toEmail = v('toEmail');
+            const toLines = [toName, toAddr, toEmail].filter(Boolean).join('\n');
+            const prevTo = document.getElementById('prevTo');
+            if (toLines) { prevTo.textContent = toLines; prevTo.style.color = ''; prevTo.style.fontStyle = ''; prevTo.style.fontSize = ''; }
+            else { prevTo.textContent = 'Client details'; prevTo.style.color = 'rgba(26,46,32,.4)'; prevTo.style.fontStyle = 'italic'; prevTo.style.fontSize = '.78rem'; }
+
+            // Invoice number & PO
+            document.getElementById('prevNum').textContent = '#' + (v('invNum') || 'INV-2026-001');
+            const po = v('poNum');
+            document.getElementById('prevPoWrap').style.display = po ? '' : 'none';
+            document.getElementById('prevPo').textContent = po;
+
+            // Dates
+            const invDate = v('invDate'), invDue = v('invDue');
+            document.getElementById('prevDate').textContent = invDate ? fmtDisplay(invDate) : '—';
+            document.getElementById('prevDue').textContent = invDue ? fmtDisplay(invDue) : '—';
+
+            // Items in preview table
+            const prevItems = document.getElementById('prevItems');
+            prevItems.innerHTML = '';
+            if (items.length === 0) {
+                prevItems.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:1.2rem;color:rgba(26,46,32,.3);font-size:.8rem;font-style:italic">No items added yet</td></tr>`;
+            } else {
+                items.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const amt = item.qty * item.rate;
+                    tr.innerHTML = `
+        <td>${esc(item.desc) || '<span style="color:rgba(26,46,32,.3);font-style:italic">Untitled item</span>'}</td>
+        <td style="text-align:right">${item.qty}</td>
+        <td style="text-align:right">${cur}${num(item.rate)}</td>
+        <td>${cur}${num(amt)}</td>`;
+                    prevItems.appendChild(tr);
+                });
+            }
+
+            // Totals
+            document.getElementById('prevSubtotal').textContent = cur + num(subtotal);
+            document.getElementById('prevTaxLabel').textContent = `Tax (${taxRate}%)`;
+            document.getElementById('prevTax').textContent = cur + num(tax);
+            document.getElementById('prevDiscRow').style.display = discRate > 0 ? '' : 'none';
+            document.getElementById('prevDiscLabel').textContent = `Discount (${discRate}%)`;
+            document.getElementById('prevDisc').textContent = '-' + cur + num(disc);
+            document.getElementById('prevTotal').textContent = cur + num(total);
+
+            // Notes & Terms
+            const notes = v('notes'), terms = v('terms');
+            const notesWrap = document.getElementById('prevNotesWrap');
+            if (notes || terms) {
+                notesWrap.style.display = '';
+                document.getElementById('prevNotes').textContent = notes;
+                document.getElementById('prevTerms').textContent = terms;
+                document.getElementById('prevNotes').style.display = notes ? '' : 'none';
+                document.getElementById('prevTerms').style.display = terms ? '' : 'none';
+            } else {
+                notesWrap.style.display = 'none';
+            }
+
+            // Also update item row amounts in form
+            document.querySelectorAll('#itemsBody tr').forEach((tr, i) => {
+                const amtCell = tr.querySelector('.item-amount');
+                if (amtCell && items[i]) amtCell.textContent = cur + num(items[i].qty * items[i].rate);
+            });
+
+            autoSave();
+        }
+
+        function fmtDisplay(dateStr) {
+            const d = new Date(dateStr + 'T12:00:00');
+            return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        /* ─────────────────────────────────────────────
+           LOGO
+        ───────────────────────────────────────────── */
+        function uploadLogo(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const src = e.target.result;
+                // form preview
+                document.getElementById('logoPreview').src = src;
+                document.getElementById('logoPreview').style.display = 'block';
+                document.getElementById('logoIcon').style.display = 'none';
+                document.getElementById('logoText').style.display = 'none';
+                // invoice preview
+                const prevLogo = document.getElementById('prevLogo');
+                const placeholder = document.querySelector('.inv-logo-placeholder');
+                prevLogo.src = src;
+                prevLogo.style.display = 'block';
+                if (placeholder) placeholder.style.display = 'none';
+                localStorage.setItem('invoiceflow_logo', src);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* ─────────────────────────────────────────────
+           AUTO-SAVE
+        ───────────────────────────────────────────── */
+        let saveTimer;
+        function autoSave() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                const state = getState();
+                localStorage.setItem('invoiceflow_draft', JSON.stringify(state));
+            }, 800);
+        }
+
+        function getState() {
+            return {
+                fromName: v('fromName'), fromAddr: v('fromAddr'), fromEmail: v('fromEmail'), fromPhone: v('fromPhone'),
+                toName: v('toName'), toAddr: v('toAddr'), toEmail: v('toEmail'),
+                invNum: v('invNum'), invDate: v('invDate'), invDue: v('invDue'), poNum: v('poNum'),
+                currency: document.getElementById('currency').value,
+                taxRate: v('taxRate'), discRate: v('discRate'),
+                notes: v('notes'), terms: v('terms'),
+                items: items.map(i => ({ ...i }))
+            };
+        }
+
+        function restoreState(s) {
+            const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+            set('fromName', s.fromName); set('fromAddr', s.fromAddr); set('fromEmail', s.fromEmail); set('fromPhone', s.fromPhone);
+            set('toName', s.toName); set('toAddr', s.toAddr); set('toEmail', s.toEmail);
+            set('invNum', s.invNum); set('invDate', s.invDate); set('invDue', s.invDue); set('poNum', s.poNum);
+            set('currency', s.currency); set('taxRate', s.taxRate); set('discRate', s.discRate);
+            set('notes', s.notes); set('terms', s.terms);
+            if (s.items && s.items.length) {
+                items = s.items;
+                itemId = Math.max(...items.map(i => i.id), 0);
+                renderItems();
+            }
+            // Logo
+            const logo = localStorage.getItem('invoiceflow_logo');
+            if (logo) {
+                document.getElementById('logoPreview').src = logo;
+                document.getElementById('logoPreview').style.display = 'block';
+                document.getElementById('logoIcon').style.display = 'none';
+                document.getElementById('logoText').style.display = 'none';
+                document.getElementById('prevLogo').src = logo;
+                document.getElementById('prevLogo').style.display = 'block';
+                const ph = document.querySelector('.inv-logo-placeholder');
+                if (ph) ph.style.display = 'none';
+            }
+        }
+
+        function saveDraft() {
+            autoSave();
+            toast('Draft saved successfully!', 'green');
+            /* Wire to Django: fetch('/api/invoices/save/', { method:'POST', body:JSON.stringify(getState()) }) */
+        }
+
+        function clearForm() {
+            if (!confirm('Reset all fields? This cannot be undone.')) return;
+            localStorage.removeItem('invoiceflow_draft');
+            localStorage.removeItem('invoiceflow_logo');
+            location.reload();
+        }
+
+        /* ─────────────────────────────────────────────
+           PDF DOWNLOAD (jsPDF)
+        ───────────────────────────────────────────── */
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+            const cur = getCur();
+            const subtotal = items.reduce((s, i) => s + i.qty * i.rate, 0);
+            const taxRate = parseFloat(v('taxRate')) || 0;
+            const discRate = parseFloat(v('discRate')) || 0;
+            const tax = subtotal * taxRate / 100;
+            const disc = subtotal * discRate / 100;
+            const total = subtotal + tax - disc;
+            const W = 210, pad = 18;
+            let y = pad;
+
+            // Header bar
+            doc.setFillColor(26, 46, 32);
+            doc.rect(0, 0, W, 28, 'F');
+
+            // INVOICE text
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.setTextColor(255, 255, 255);
+            doc.text('INVOICE', pad, 17);
+
+            // Invoice number
+            doc.setFontSize(9);
+            doc.setTextColor(180, 220, 200);
+            doc.text('#' + (v('invNum') || 'INV-2026-001'), W - pad, 11, { align: 'right' });
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Date: ' + (v('invDate') ? fmtDisplay(v('invDate')) : '—'), W - pad, 17, { align: 'right' });
+            doc.text('Due:  ' + (v('invDue') ? fmtDisplay(v('invDue')) : '—'), W - pad, 23, { align: 'right' });
+
+            y = 38;
+
+            // FROM / TO
+            doc.setTextColor(26, 46, 32);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(100);
+            doc.text('FROM', pad, y);
+            doc.text('BILL TO', W / 2 + 2, y);
+            y += 4;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(26, 46, 32);
+            const fromName = v('fromName') || 'Your Business';
+            const toName = v('toName') || 'Client Name';
+            doc.text(fromName, pad, y);
+            doc.text(toName, W / 2 + 2, y);
+            y += 5;
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(80);
+            const fromLines = [v('fromAddr'), v('fromEmail'), v('fromPhone')].filter(Boolean);
+            const toLines = [v('toAddr'), v('toEmail')].filter(Boolean);
+            const maxLines = Math.max(fromLines.length, toLines.length);
+            for (let i = 0; i < maxLines; i++) {
+                if (fromLines[i]) doc.text(fromLines[i], pad, y);
+                if (toLines[i]) doc.text(toLines[i], W / 2 + 2, y);
+                y += 4.5;
+            }
+
+            y += 5;
+
+            // Items table header
+            doc.setFillColor(26, 46, 32);
+            doc.rect(pad, y, W - pad * 2, 7, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.5);
+            doc.setTextColor(200, 220, 210);
+            doc.text('DESCRIPTION', pad + 2, y + 4.5);
+            doc.text('QTY', W - 85, y + 4.5, { align: 'right' });
+            doc.text('RATE', W - 58, y + 4.5, { align: 'right' });
+            doc.text('AMOUNT', W - pad, y + 4.5, { align: 'right' });
+            y += 10;
+
+            // Items
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8.5);
+            items.forEach((item, idx) => {
+                if (idx % 2 === 0) { doc.setFillColor(248, 248, 248); doc.rect(pad, y - 3, W - pad * 2, 7, 'F'); }
+                doc.setTextColor(30);
+                doc.text(item.desc || 'Untitled item', pad + 2, y + 1.5);
+                doc.setTextColor(80);
+                doc.text(String(item.qty), W - 85, y + 1.5, { align: 'right' });
+                doc.text(cur + num(item.rate), W - 58, y + 1.5, { align: 'right' });
+                doc.setTextColor(26, 46, 32);
+                doc.setFont('helvetica', 'bold');
+                doc.text(cur + num(item.qty * item.rate), W - pad, y + 1.5, { align: 'right' });
+                doc.setFont('helvetica', 'normal');
+                y += 7;
+            });
+
+            y += 4;
+
+            // Totals block
+            const tCol = W - pad - 50;
+            doc.setDrawColor(220);
+            doc.line(tCol, y, W - pad, y);
+            y += 5;
+
+            const tRow = (label, val, bold) => {
+                doc.setFont('helvetica', bold ? 'bold' : 'normal');
+                doc.setFontSize(8.5);
+                doc.setTextColor(100);
+                doc.text(label, tCol, y);
+                doc.setTextColor(26, 46, 32);
+                doc.text(val, W - pad, y, { align: 'right' });
+                y += 5.5;
+            };
+            tRow('Subtotal', cur + num(subtotal));
+            tRow(`Tax (${taxRate}%)`, cur + num(tax));
+            if (discRate > 0) tRow(`Discount (${discRate}%)`, '-' + cur + num(disc));
+
+            y += 1;
+            doc.setFillColor(26, 46, 32);
+            doc.roundedRect(tCol - 4, y - 4, W - pad - tCol + 4 + pad, 10, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Total Due', tCol, y + 2.5);
+            doc.setFontSize(11);
+            doc.text(cur + num(total), W - pad, y + 2.5, { align: 'right' });
+            y += 14;
+
+            // Notes
+            const notes = v('notes'), terms = v('terms');
+            if (notes || terms) {
+                doc.setDrawColor(220); doc.line(pad, y, W - pad, y); y += 5;
+                if (notes) {
+                    doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(100);
+                    doc.text('NOTES', pad, y); y += 4;
+                    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(80);
+                    const wrapped = doc.splitTextToSize(notes, W - pad * 2);
+                    doc.text(wrapped, pad, y); y += wrapped.length * 4.5;
+                }
+                if (terms) {
+                    y += 2;
+                    doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(100);
+                    doc.text('TERMS', pad, y); y += 4;
+                    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120);
+                    const wt = doc.splitTextToSize(terms, W - pad * 2);
+                    doc.text(wt, pad, y);
+                }
+            }
+
+            // Footer
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(160);
+            doc.text('Generated with InvoiceFlow · invoiceflow.in', W / 2, 290, { align: 'center' });
+
+            const fname = 'Invoice-' + (v('invNum') || 'draft').replace(/\s/g, '-') + '.pdf';
+            doc.save(fname);
+            toast('PDF downloaded!', 'green');
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => toast('Link copied!', 'green'));
+        }
+
+        /* ─────────────────────────────────────────────
+           MOBILE TABS
+        ───────────────────────────────────────────── */
+        function showTab(tab) {
+            const form = document.getElementById('panelForm');
+            const preview = document.getElementById('panelPreview');
+            const tForm = document.getElementById('tabForm');
+            const tPrev = document.getElementById('tabPreview');
+            if (tab === 'form') {
+                form.classList.remove('mob-hidden');
+                preview.classList.add('mob-hidden');
+                tForm.classList.add('active');
+                tPrev.classList.remove('active');
+            } else {
+                form.classList.add('mob-hidden');
+                preview.classList.remove('mob-hidden');
+                tForm.classList.remove('active');
+                tPrev.classList.add('active');
+            }
+        }
+
+        /* ─────────────────────────────────────────────
+           TOAST
+        ───────────────────────────────────────────── */
+        let toastTimer;
+        function toast(msg, type) {
+            const el = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMsg');
+            msgEl.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+        }
+
+        /* ─────────────────────────────────────────────
+           HELPERS
+        ───────────────────────────────────────────── */
+        function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+        function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function num(n) { return (parseFloat(n) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        function getCur() { const el = document.getElementById('currency'); return el ? el.value : '₹'; }
+
+        /* ─────────────────────────────────────────────
+           PRINT STYLES (inline)
+        ───────────────────────────────────────────── */
+        const printStyle = document.createElement('style');
+        printStyle.textContent = `
+@media print {
+  nav, .panel-form, .preview-label, .preview-actions, .mob-tabs, #glow, .toast { display:none!important; }
+  .app { height:auto!important; padding-top:0!important; }
+  .panel-preview { padding:0!important; background:#fff!important; }
+  .invoice-sheet { box-shadow:none!important; border-radius:0!important; max-width:100%!important; }
+  body { background:#fff!important; }
+}`;
+        document.head.appendChild(printStyle);
+    </script>
+</body>
+
+</html>
