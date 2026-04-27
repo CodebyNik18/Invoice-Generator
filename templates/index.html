@@ -25,8 +25,8 @@
       <a href="#how">How it Works</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="btn btn-outline">Sign In</a>
-      <a href="#" class="btn btn-solid">Register Free</a>
+      <a href="{% url 'login' %}" class="btn btn-outline">Sign In</a>
+      <a href="{% url 'signin' %}" class="btn btn-solid">Register Free</a>
     </div>
     <button class="hamburger" id="burger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -37,8 +37,8 @@
   <div class="mobile-nav" id="mobileNav">
     <a href="#features" onclick="closeMobile()">Features</a>
     <a href="#how" onclick="closeMobile()">How it Works</a>
-    <a href="#" class="btn btn-outline" style="font-size:1rem" onclick="closeMobile()">Sign In</a>
-    <a href="#" class="btn btn-solid" style="font-size:1rem" onclick="closeMobile()">Register Free</a>
+    <a href="{% url 'login' %}" class="btn btn-outline" style="font-size:1rem" onclick="closeMobile()">Sign In</a>
+    <a href="{% url 'signin' %}" class="btn btn-solid" style="font-size:1rem" onclick="closeMobile()">Register Free</a>
   </div>
 
   <!-- HERO -->
@@ -56,8 +56,8 @@
         <p class="hero-desc anim in">Generate professional invoices, download as PDF, and track every client transaction
           — all saved to your personal account.</p>
         <div class="hero-btns anim in">
-          <a href="#" class="btn btn-terra btn-lg">Start Creating â†’</a>
-          <a href="#" class="btn btn-outline btn-lg">Sign In</a>
+          <a href="{% url 'signin' %}" class="btn btn-terra btn-lg">Start Creating</a>
+          <a href="{% url 'login' %}" class="btn btn-outline btn-lg">Sign In</a>
         </div>
         <div class="hero-stats anim in">
           <div class="stat"><span class="stat-n">12K+</span><span class="stat-l">Happy Users</span></div>
@@ -233,8 +233,8 @@
   </section>
 
     <div class="cta-btns">
-      <a href="#" class="btn btn-terra btn-lg">Create Free Account â†’</a>
-      <a href="#" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)">Already have an account</a>
+      <a href="{% url 'signin' %}" class="btn btn-terra btn-lg">Create Free Account â†’</a>
+      <a href="{% url 'login' %}" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)">Already have an account</a>
     </div>
   </section>
 
