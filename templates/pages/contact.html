@@ -10,7 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/pages/contact.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/contact.css' %}">
 </head>
 
 <body>
@@ -78,7 +78,7 @@
                                 href="mailto:hello@invoiceflow.in">hello@invoiceflow.in</a></p>
                     </div>
                 </div>
-                <div class="info-card">
+                <!-- <div class="info-card">
                     <div class="ic-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
                             <path
@@ -89,7 +89,7 @@
                         <strong>Call Us</strong>
                         <p>Mon–Fri, 9 am to 6 pm IST.<br><a href="tel:+918000000000">+91 80000 00000</a></p>
                     </div>
-                </div>
+                </div> -->
                 <div class="info-card">
                     <div class="ic-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="1.8">
@@ -118,52 +118,68 @@
             </div>
 
             <!-- Contact form -->
-            <div class="form-card">
-                <div class="fc-title">Send a Message</div>
-                <p class="fc-sub">Fill out the form below and we'll be in touch as soon as possible.</p>
-
-                <div class="field-row">
-                    <div class="field">
-                        <label>First Name</label>
-                        <input type="text" placeholder="Riya" id="fname" />
-                    </div>
-                    <div class="field">
-                        <label>Last Name</label>
-                        <input type="text" placeholder="Sharma" id="lname" />
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="you@example.com" id="email" />
-                </div>
-                <div class="field">
-                    <label>Topic</label>
-                    <select id="topic">
-                        <option value="" disabled selected>Select a topic…</option>
-                        <option>General Enquiry</option>
-                        <option>Technical Support</option>
-                        <option>Bug Report</option>
-                        <option>Feature Request</option>
-                        <option>Account Help</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Message</label>
-                    <textarea placeholder="Tell us how we can help…" id="message"></textarea>
-                </div>
-                <div class="submit-row">
-                    <button class="btn-submit" onclick="submitForm()">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.2">
-                            <line x1="22" y1="2" x2="11" y2="13" />
-                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                        </svg>
-                        Send Message
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    <span>{{ message }}</span>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none'">
+                        &times;
                     </button>
-                    <span class="submit-note">We'll reply within 24 hours</span>
                 </div>
+                {% endfor %}
             </div>
+            {% endif %}
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-card">
+                    <div class="fc-title">Send a Message</div>
+                    <p class="fc-sub">Fill out the form below and we'll be in touch as soon as possible.</p>
+
+                    <div class="field-row">
+                        <div class="field">
+                            <label>First Name *</label>
+                            <input type="text" placeholder="Riya" id="fname" name="firstname" />
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input type="text" placeholder="Sharma" id="lname" name="lastname" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Email Address *</label>
+                        <input type="email" placeholder="you@example.com" id="email" name="email" />
+                    </div>
+                    <div class="field">
+                        <label>Topic *</label>
+                        <select id="topic" name="topic">
+                            <option value="" disabled selected>Select a topic…</option>
+                            <option value="General Enquiry">General Enquiry</option>
+                            <option value="Technical Support">Technical Support</option>
+                            <option value="Bug Report">Bug Report</option>
+                            <option value="Feature Request">Feature Request</option>
+                            <option value="Account Help">Account Help</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Message</label>
+                        <textarea name="message" placeholder="Tell us how we can help…" id="message"></textarea>
+                    </div>
+                    <div class="submit-row">
+                        <button class="btn-submit" onclick="submitForm()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                            Send Message
+                        </button>
+                        <span class="submit-note">We'll reply within 24 hours</span>
+                    </div>
+                </div>
+            </form>
 
         </div>
     </section>
@@ -173,7 +189,8 @@
         <div class="faq-inner">
             <span class="section-tag reveal">✦ FAQ</span>
             <h2 class="section-title reveal">Common Questions</h2>
-            <p class="section-sub reveal">Can't find what you need? <a href="{% url 'help' %}">Visit our Help Centre →</a></p>
+            <p class="section-sub reveal">Can't find what you need? <a href="{% url 'help' %}">Visit our Help Centre
+                    →</a></p>
 
             <div class="faq-list">
                 <div class="faq-item reveal">
@@ -247,6 +264,8 @@
     </footer>
 
     <!-- TOAST -->
+    <!--
+    
     <div class="toast" id="toast">
         <span class="toast-check">
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
@@ -255,10 +274,9 @@
             </svg>
         </span>
         Message sent! We'll reply within 24 hours.
-    </div>
+    </div> -->
 
     <script src="{% static 'js/pages/contact.js' %}"></script>
 </body>
 
 </html>
-

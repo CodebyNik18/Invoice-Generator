@@ -38,3 +38,9 @@ const observer = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+        el.style.display = 'none';
+    });
+}, 4000);
