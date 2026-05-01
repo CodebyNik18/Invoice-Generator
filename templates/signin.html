@@ -32,12 +32,24 @@
 
         <!-- LEFT: auth panel -->
         <div class="auth-panel">
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close-btn" aria-label="Close message">
+                        &times;
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <div class="auth-box">
 
                 <h1 class="auth-heading">Create account</h1>
                 <p class="auth-sub">
                     Already registered? <a href="{% url 'login' %}">Sign in →</a>
-                </p>
+                </p>`
 
                 <!--
         Error strip — Django renders this when form has errors.
@@ -68,8 +80,8 @@
         Django view: CreateUserView or a custom RegisterView
         On success: redirect to /dashboard/ or email-verification page
       -->
-                <form method="POST" action="/accounts/register/" novalidate id="registerForm">
-                    <!-- CSRF: add {% csrf_token %} here -->
+                <form method="post" action="" novalidate id="registerForm">
+                    {% csrf_token %}
                     <input type="hidden" name="next" value="/dashboard/">
 
                     <!-- Name row -->
@@ -78,12 +90,6 @@
                             <label for="id_first_name">First Name <span style="color:var(--terra)">*</span></label>
                             <input type="text" id="id_first_name" name="first_name" placeholder="Riya"
                                 autocomplete="given-name" value="" required>
-                            <!--
-              Django field error:
-              {% if form.first_name.errors %}
-                <span class="field-error">{{ form.first_name.errors.0 }}</span>
-              {% endif %}
-            -->
                         </div>
                         <div class="field">
                             <label for="id_last_name">Last Name</label>
@@ -98,11 +104,7 @@
                         <input type="email" id="id_email" name="email" placeholder="riya@studio.in" autocomplete="email"
                             value="" required>
                         <span class="field-hint">We'll send your invoices and notifications here.</span>
-                        <!--
-            {% if form.email.errors %}
-              <span class="field-error">{{ form.email.errors.0 }}</span>
-            {% endif %}
-          -->
+
                     </div>
 
                     <!-- Business name (optional but useful for invoice pre-fill) -->
@@ -143,11 +145,7 @@
                             </div>
                             <div class="pw-strength-label" id="pwLabel">Enter a password</div>
                         </div>
-                        <!--
-            {% if form.password1.errors %}
-              <span class="field-error">{{ form.password1.errors.0 }}</span>
-            {% endif %}
-          -->
+
                     </div>
 
                     <!-- Confirm password -->
@@ -165,11 +163,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <!--
-            {% if form.password2.errors %}
-              <span class="field-error">{{ form.password2.errors.0 }}</span>
-            {% endif %}
-          -->
+
                     </div>
 
                     <!-- T&C checkbox -->
@@ -214,7 +208,7 @@
                 <div class="deco-tag" style="animation:fadeUp .5s ease both">
                     <span class="deco-dot"></span>Free forever
                 </div>
-                
+
                 <h1 class="deco-title" style="animation:fadeUp .5s .08s ease both">
                     Start creating<br><i>beautiful</i> invoices<br>today
                 </h1>
@@ -262,7 +256,7 @@
                 </div>
             </div>
         </div>
-        
+
 
     </div><!-- /page-wrap -->
 
