@@ -11,6 +11,17 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ── Tab switcher (Password ↔ OTP) ── */
+function hideMessage(alert) {
+    if (!alert || alert.classList.contains('is-hiding')) return;
+    alert.classList.add('is-hiding');
+    setTimeout(() => alert.remove(), 220);
+}
+
+document.querySelectorAll('.alert').forEach(alert => {
+    alert.querySelector('.close-btn')?.addEventListener('click', () => hideMessage(alert));
+    setTimeout(() => hideMessage(alert), 5000);
+});
+
 function switchTab(tab) {
     const isPw = (tab === 'password');
     document.getElementById('tabPassword').classList.toggle('active', isPw);

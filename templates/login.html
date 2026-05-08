@@ -92,6 +92,18 @@
 
         <!-- RIGHT: auth panel -->
         <div class="auth-panel">
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close-btn" aria-label="Close message">
+                        &times;
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <div class="auth-box">
 
                 <h1 class="auth-heading">Sign in</h1>
@@ -117,7 +129,7 @@
 
                 <!-- ════════════════════════════
            PANEL A: PASSWORD LOGIN
-           POST → /accounts/login/
+           POST → 
       ════════════════════════════ -->
                 <div id="panelPassword" role="tabpanel">
 
@@ -138,9 +150,8 @@
                         Invalid email or password. Please try again.
                     </div>
 
-                    <form method="POST" action="/accounts/login/" novalidate id="passwordForm">
-                        <!-- CSRF: add {% csrf_token %} here -->
-                        <!-- Hidden field so Django view knows which form was submitted -->
+                    <form method="post" action="" novalidate id="passwordForm">
+                        {% csrf_token %}
                         <input type="hidden" name="login_method" value="password">
                         <input type="hidden" name="next" value="/dashboard/">
 

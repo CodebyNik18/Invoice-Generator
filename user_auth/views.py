@@ -2,14 +2,36 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from user_auth.models import Profile
+from django.contrib.auth import authenticate, login
 
 
-def login(request):
+def log_in(request):
+    if request.method == 'POST':
+        login_method = request.POST['login_method']
+        if login_method == 'password':
+
+            username = request.POST['email']
+            password = request.POST['password']
+
+            if not username or not password:
+                messages.error(request, "Please Fill all Details for LogIn...")
+                return redirect('log_in')
+
+            user = authenticate(request=request, username=username, password=password)
+            if user:
+                login(request, user)
+                return render(request=request, template_name="invoice.html")
+            
+            else:
+                messages.error(request, "Invalid Credentials...")
+                return redirect('log_in')
+            
     return render(request=request, template_name='login.html')
 
 def signup(request):
     if request.method == 'POST':
 
+        #Getting Details of Form
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
@@ -19,6 +41,7 @@ def signup(request):
         password2 = request.POST['password2']
         agree_terms = request.POST.get('agree_terms')
 
+        #Conditions Checking
         if not first_name or not email or not password1 or not password2:
             messages.error(request=request, message="All '*' fields are required...")
             return redirect('signin')
@@ -35,6 +58,7 @@ def signup(request):
             messages.error(request=request, message="This Email already Exists...")
             return redirect('signin')
         
+        #Creating User
         user = User.objects.create_user(
             first_name=first_name,
             last_name=last_name,

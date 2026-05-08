@@ -22,7 +22,7 @@
         <a href="{% url 'home' %}" class="logo">Invoice<span>Flow</span></a>
         <div class="nav-right">
             <span style="font-size:.85rem;color:var(--ink-60)">Already have an account?</span>
-            <a href="{% url 'login' %}" class="btn btn-ghost">Sign In</a>
+            <a href="{% url 'log_in' %}" class="btn btn-ghost">Sign In</a>
         </div>
     </nav>
 
@@ -48,7 +48,7 @@
 
                 <h1 class="auth-heading">Create account</h1>
                 <p class="auth-sub">
-                    Already registered? <a href="{% url 'login' %}">Sign in →</a>
+                    Already registered? <a href="{% url 'log_in' %}">Sign in →</a>
                 </p>`
 
                 <!--
@@ -71,7 +71,7 @@
       -->
                 <div class="already-box" id="alreadyBox">
                     <span>That email is already registered.</span>
-                    <a href="{% url 'login' %}">Sign in instead →</a>
+                    <a href="{% url 'log_in' %}">Sign in instead →</a>
                 </div>
 
                 <!--
