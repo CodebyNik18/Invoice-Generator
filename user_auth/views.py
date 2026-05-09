@@ -25,8 +25,13 @@ def log_in(request):
             else:
                 messages.error(request, "Invalid Credentials...")
                 return redirect('log_in')
-            
+
     return render(request=request, template_name='login.html')
+
+
+def otp_verify(request):
+    return render(request, 'otp_verify.html')
+
 
 def signup(request):
     if request.method == 'POST':

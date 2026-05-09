@@ -236,8 +236,7 @@
                             No account found with that email.
                         </div>
 
-                        <form method="POST" action="/accounts/otp/request/" novalidate id="otpRequestForm">
-                            <!-- CSRF: add {% csrf_token %} here -->
+                        <form action="otp_verify.html" novalidate id="otpRequestForm">
                             <input type="hidden" name="login_method" value="otp">
 
                             <div class="field">
@@ -268,26 +267,7 @@
         -->
                     <div class="otp-step" id="otpStep2">
 
-                        <div class="success-strip msg-strip" id="otpStep2SentMsg">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            <span>OTP sent to <strong id="sentToEmail">your email</strong></span>
-                        </div>
-
-                        <div class="error-strip msg-strip" id="otpInvalidError">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                            </svg>
-                            Incorrect or expired OTP. Please try again.
-                        </div>
-
-                        <form method="POST" action="/accounts/otp/verify/" novalidate id="otpVerifyForm">
-                            <!-- CSRF: add {% csrf_token %} here -->
+                        <form action="otp_verify.html" novalidate id="otpVerifyForm">
                             <input type="hidden" name="login_method" value="otp">
                             <!--
               Django passes the email from session — you can also render it

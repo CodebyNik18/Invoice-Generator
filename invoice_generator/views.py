@@ -4,3 +4,5 @@ from django.shortcuts import render
 def home(request):
     return render(request=request, template_name='index.html')
 
+def invoice(request):
+    return render(request=request, template_name='invoice.html')

@@ -22,6 +22,31 @@ document.querySelectorAll('.alert').forEach(alert => {
     setTimeout(() => hideMessage(alert), 5000);
 });
 
+function showFrontendMessage(text, type = 'success') {
+    let container = document.querySelector('.messages-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'messages-container';
+        document.body.appendChild(container);
+    }
+
+    const alert = document.createElement('div');
+    alert.className = `alert ${type}`;
+    alert.setAttribute('role', 'alert');
+    alert.innerHTML = `<span>${text}</span><button type="button" class="close-btn" aria-label="Close message">&times;</button>`;
+    container.appendChild(alert);
+    alert.querySelector('.close-btn')?.addEventListener('click', () => hideMessage(alert));
+    setTimeout(() => hideMessage(alert), 5000);
+}
+
+const otpVerifyForm = document.getElementById('otpVerifyForm');
+if (otpVerifyForm) {
+    otpVerifyForm.addEventListener('submit', event => {
+        event.preventDefault();
+        showFrontendMessage('OTP verified successfully.', 'success');
+    });
+}
+
 function switchTab(tab) {
     const isPw = (tab === 'password');
     document.getElementById('tabPassword').classList.toggle('active', isPw);

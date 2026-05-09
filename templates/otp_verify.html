@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify OTP - InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+
+    <div id="glow"></div>
+
+    <nav id="nav">
+        <a href="{% url 'home' %}" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-right">
+            <a href="{% url 'log_in' %}" class="btn btn-dark">Back to Sign In</a>
+        </div>
+    </nav>
+
+    <div class="page-wrap">
+
+        <div class="deco-panel">
+            <div class="deco-ring dr1"></div>
+            <div class="deco-ring dr2"></div>
+            <div class="deco-ring dr3"></div>
+            <div class="deco-blob db1"></div>
+            <div class="deco-blob db2"></div>
+
+            <div class="deco-content">
+                <div class="deco-tag" style="animation:fadeUp .5s ease both">
+                    <span class="deco-dot"></span>Passwordless sign in
+                </div>
+                <h1 class="deco-title" style="animation:fadeUp .5s .08s ease both">
+                    Verify your<br><i>one-time</i> code
+                </h1>
+                <p class="deco-sub" style="animation:fadeUp .5s .16s ease both">
+                    Enter the 6-digit code sent to your email to continue securely.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-panel">
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close-btn" aria-label="Close message">
+                        &times;
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="auth-box">
+                <h1 class="auth-heading">Enter OTP</h1>
+                <p class="auth-sub">
+                    We sent a code to your email.
+                </p>
+
+                <form action="#" novalidate id="otpVerifyForm">
+                    <input type="hidden" name="login_method" value="otp">
+
+                    <div class="field">
+                        <label>Enter 6-digit OTP</label>
+                        <div class="otp-fields" id="otpFields">
+                            <input type="text" name="otp_digit_1" id="otp1" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" autocomplete="one-time-code" required>
+                            <input type="text" name="otp_digit_2" id="otp2" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" required>
+                            <input type="text" name="otp_digit_3" id="otp3" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" required>
+                            <input type="text" name="otp_digit_4" id="otp4" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" required>
+                            <input type="text" name="otp_digit_5" id="otp5" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" required>
+                            <input type="text" name="otp_digit_6" id="otp6" maxlength="1" inputmode="numeric"
+                                pattern="[0-9]" required>
+                        </div>
+                        <input type="hidden" name="otp_code" id="otpCombined">
+                    </div>
+
+                    <button type="submit" class="btn btn-dark btn-full" id="otpVerifyBtn">
+                        Verify &amp; Sign In
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+                </form>
+
+                <div style="text-align:center; margin-top:1rem;">
+                    <button type="button"
+                        style="font-size:.8rem;color:var(--green-dark);background:none;border:none;cursor:pointer;text-decoration:underline;font-weight:600;">
+                        Resend OTP
+                    </button>
+                </div>
+
+                <p class="terms-note">
+                    Need a different account? <a href="{% url 'log_in' %}">Go back to sign in</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="foot-inner">
+            <span class="foot-logo">InvoiceFlow</span>
+            <div class="foot-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'help' %}">Help</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'privacy' %}">Privacy</a>
+                <a href="{% url 'terms' %}">Terms</a>
+            </div>
+            <span class="foot-copy">© 2026 InvoiceFlow. All rights reserved.</span>
+        </div>
+    </footer>
+    <script src="{% static 'js/login.js' %}"></script>
+
+</body>
+
+</html>

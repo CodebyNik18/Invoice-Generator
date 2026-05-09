@@ -23,4 +23,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('pages/', include('pages.urls')),
     path('accounts/', include('user_auth.urls')),
+    path('invoice-generator/', views.invoice, name='invoice')
 ]
