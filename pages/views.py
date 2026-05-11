@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 import resend
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def help(request):
     return render(request=request, template_name="help.html")
@@ -57,7 +60,7 @@ This is an automated notification from your website.
 """
         resend.Emails.send({
             "from": "onboarding@resend.dev",
-            "to": ["contact.aigr0@gmail.com"],
+            "to": [os.getenv("EMAIL")],
             "subject": "New Contact Form",
             "text": email_message,
         })

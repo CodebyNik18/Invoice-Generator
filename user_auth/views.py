@@ -3,7 +3,13 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from user_auth.models import Profile
 from django.contrib.auth import authenticate, login
+from brevo import Brevo
+from brevo.transactional_emails import SendTransacEmailRequestSender, SendTransacEmailRequestToItem
+from dotenv import load_dotenv
+import resend
+import os
 
+load_dotenv()
 
 def log_in(request):
     if request.method == 'POST':
@@ -77,6 +83,86 @@ def signup(request):
             phone=phone
         )
 
+        user_email = f"""
+<h2>Welcome to Invoice Generator 🚀</h2>
+
+<p>Hi { first_name+last_name },</p>
+
+<p>Thank you for creating an account with us! Your account has been successfully registered.</p>
+
+<hr>
+
+<h3>Your Account Details:</h3>
+<p><strong>Email:</strong> { email }</p>
+<p><strong>Business Name:</strong> { business_name }</p>
+<p><strong>Phone:</strong> { phone }</p>
+<hr>
+
+<p>You can now start creating and managing your invoices.</p>
+
+
+<br>
+
+<p>If you did not create this account, please ignore this email.</p>
+
+<hr>
+
+<p style="font-size:12px;color:gray;">
+This is an automated message. Please do not reply.
+</p>
+"""     
+        admin_email = f"""
+<h2>New User Registration 🚀</h2>
+
+<p>A new user has created an account on your website.</p>
+
+<hr>
+
+<h3>User Details:</h3>
+<p><strong>Name:</strong> { first_name+last_name }</p>
+<p><strong>Email:</strong> { email }</p>
+<p><strong>Business Name:</strong> { business_name }</p>
+<p><strong>Phone:</strong> { phone }</p>
+
+<hr>
+
+<p>
+You may want to monitor this account or take any necessary action.
+</p>
+
+<hr>
+
+<p style="font-size:12px;color:gray;">
+System Notification - Invoice Generator
+</p>
+"""
+        client = Brevo(
+        api_key=os.getenv("BREVO_API_KEY"),
+        )
+        response = client.transactional_emails.send_transac_email(
+            html_content=user_email,
+            sender=SendTransacEmailRequestSender(
+                email=os.getenv('EMAIL'),
+                name="InvoiceFlow",
+            ),
+            subject="Account Creation Successful...",
+            to=[
+                SendTransacEmailRequestToItem(
+                    email=email,
+                    name=first_name,
+                )
+            ],
+        )
+
+        print(response)
+
+        resend.api_key = os.getenv("RESEND_API_KEY")
+        resend.Emails.send({
+            "from": "onboarding@resend.dev",
+            "to": [os.getenv("EMAIL")],
+            'subject': "New Account Creation",
+            'html': admin_email
+        })
         messages.success(request=request, message="Account Created Successfully, You can Login now...")
         return redirect('signin')
     return render(request=request, template_name='signin.html')
