@@ -108,13 +108,6 @@
 
                 <h1 class="auth-heading">Sign in</h1>
                 <p class="auth-sub">New here? <a href="{% url 'signin' %}">Create a free account →</a></p>
-
-                <!-- Tab switcher: Password login vs OTP login -->
-                <!-- 
-        Django tip: read ?method=otp or ?method=password from the URL
-        to set the active tab server-side. Or use a hidden input to
-        remember the last method.
-      -->
                 <div class="auth-tabs" role="tablist">
                     <button class="auth-tab active" id="tabPassword" role="tab" aria-selected="true"
                         aria-controls="panelPassword" type="button" onclick="switchTab('password')">
@@ -126,20 +119,8 @@
                     </button>
                 </div>
 
-
-                <!-- ════════════════════════════
-           PANEL A: PASSWORD LOGIN
-           POST → 
-      ════════════════════════════ -->
                 <div id="panelPassword" role="tabpanel">
 
-                    <!--
-          Django renders this when form has errors:
-          <div class="error-strip show">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Invalid email or password. Please try again.
-          </div>
-        -->
                     <div class="error-strip msg-strip" id="pwError">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
@@ -187,56 +168,13 @@
                         </button>
                     </form>
 
-                </div><!-- /panelPassword -->
+                </div>
 
-
-                <!-- ════════════════════════════
-           PANEL B: OTP LOGIN
-           Two-step — Django controls
-           which step is visible via
-           the URL / session flag.
-
-           Step 1: user enters email  → POST /accounts/otp/request/
-           Step 2: user enters OTP    → POST /accounts/otp/verify/
-
-           JS only handles:
-           - switching between the 2 visual steps
-           - auto-focus / auto-advance OTP inputs
-           - countdown timer display (visual only)
-      ════════════════════════════ -->
                 <div id="panelOtp" style="display:none">
-
-                    <!-- STEP 1 — Enter email to receive OTP -->
-                    <!--
-          Django controls which step is shown:
-          If otp_sent == True in context → hide step1, show step2
-          Otherwise → show step1, hide step2
-
-          Use: class="otp-step active" or class="otp-step"
-        -->
                     <div class="otp-step active" id="otpStep1">
 
-                        <div class="success-strip msg-strip" id="otpSentMsg">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.1 11.83" />
-                                <polyline points="22 2 12 12" />
-                            </svg>
-                            OTP sent! Check your inbox.
-                        </div>
-
-                        <div class="error-strip msg-strip" id="otpEmailError">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                            </svg>
-                            No account found with that email.
-                        </div>
-
-                        <form action="otp_verify.html" novalidate id="otpRequestForm">
+                        <form method="post" action="" novalidate id="otpRequestForm">
+                            {% csrf_token %}
                             <input type="hidden" name="login_method" value="otp">
 
                             <div class="field">
@@ -256,81 +194,8 @@
                             </button>
                         </form>
 
-                    </div><!-- /otpStep1 -->
-
-
-                    <!-- STEP 2 — Enter the 6-digit OTP -->
-                    <!--
-          Django shows this step when:
-          - otp_sent == True (session flag set after step 1 POST)
-          - Pass the email back as a hidden field or in session
-        -->
-                    <div class="otp-step" id="otpStep2">
-
-                        <form action="otp_verify.html" novalidate id="otpVerifyForm">
-                            <input type="hidden" name="login_method" value="otp">
-                            <!--
-              Django passes the email from session — you can also render it
-              as a hidden field: <input type="hidden" name="email" value="{{ otp_email }}">
-            -->
-                            <input type="hidden" name="email" id="hiddenOtpEmail" value="">
-
-                            <div class="field">
-                                <label>Enter 6-digit OTP</label>
-                                <!--
-                Each input has name="otp_digit_N".
-                In your Django view, combine them:
-                  otp = ''.join([request.POST.get(f'otp_digit_{i}','') for i in range(1,7)])
-                OR use a single hidden input that JS fills:
-              -->
-                                <div class="otp-fields" id="otpFields">
-                                    <input type="text" name="otp_digit_1" id="otp1" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]" autocomplete="one-time-code">
-                                    <input type="text" name="otp_digit_2" id="otp2" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]">
-                                    <input type="text" name="otp_digit_3" id="otp3" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]">
-                                    <input type="text" name="otp_digit_4" id="otp4" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]">
-                                    <input type="text" name="otp_digit_5" id="otp5" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]">
-                                    <input type="text" name="otp_digit_6" id="otp6" maxlength="1" inputmode="numeric"
-                                        pattern="[0-9]">
-                                </div>
-                                <!-- Single combined hidden field — JS fills this from the 6 boxes above -->
-                                <input type="hidden" name="otp_code" id="otpCombined">
-                            </div>
-
-                            <!-- Countdown + resend -->
-                            <div class="resend-row">
-                                <span class="resend-timer">
-                                    Resend in <span id="countdown">60</span>s
-                                </span>
-                                <!-- Resend = a new POST to /accounts/otp/request/ with the same email -->
-                                <button type="button" class="resend-btn" id="resendBtn" onclick="resendOtp()">
-                                    Resend OTP
-                                </button>
-                            </div>
-
-                            <button type="submit" class="btn btn-dark btn-full" id="otpVerifyBtn">
-                                Verify &amp; Sign In
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.2">
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                    <polyline points="12 5 19 12 12 19" />
-                                </svg>
-                            </button>
-                        </form>
-
-                        <div style="text-align:center; margin-top:1rem;">
-                            <button type="button" onclick="goBackToStep1()"
-                                style="font-size:.8rem;color:var(--ink-60);background:none;border:none;cursor:pointer;text-decoration:underline;">
-                                ← Use a different email
-                            </button>
-                        </div>
-
-                    </div><!-- /otpStep2 -->
-
+                    </div>
+                    
                 </div><!-- /panelOtp -->
 
                 <p class="terms-note">

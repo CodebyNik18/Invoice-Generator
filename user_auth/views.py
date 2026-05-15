@@ -8,6 +8,7 @@ from brevo.transactional_emails import SendTransacEmailRequestSender, SendTransa
 from dotenv import load_dotenv
 import resend
 import os
+from faker import Faker
 
 load_dotenv()
 
@@ -31,7 +32,64 @@ def log_in(request):
             else:
                 messages.error(request, "Invalid Credentials...")
                 return redirect('log_in')
+            
+        if login_method == 'otp':
 
+            username = request.POST['email']
+
+            if not username:
+                messages.error(request, "Please enter your Email for OTP verification...")
+                return redirect('log_in')
+            
+            if not User.objects.filter(username=username).exists():
+                messages.error(request, "Please enter valid Email...")
+                return redirect('log_in')
+            
+            fake = Faker()
+            otp = fake.random_number(fix_len=True, digits=6)
+            otp_email = f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;color:#222;">
+
+<h1 style="margin-bottom:10px;">InvoiceFlow</h1>
+
+<p>Hi { username },</p>
+
+<p>Use the verification code below to securely sign in to your account.</p>
+
+<div style="margin:30px 0;text-align:center;">
+    <div style="display:inline-block;background:#f5f5f5;padding:16px 32px;border-radius:10px;font-size:34px;font-weight:700;letter-spacing:8px;">
+        { otp }
+    </div>
+</div>
+
+<p>If you didn’t try to sign in, you can safely ignore this email.</p>
+
+<br>
+
+<p style="color:#666;font-size:13px;">
+    — InvoiceFlow Security Team
+</p>
+
+</div>
+        """
+            client = Brevo(api_key=os.getenv("BREVO_API_KEY"))
+            client.transactional_emails.send_transac_email(
+                html_content=otp_email,
+                sender=SendTransacEmailRequestSender(
+                    email=os.getenv('EMAIL'),
+                    name="InvoiceFlow",
+                ),
+                subject="OTP verification Email...",
+                to=[
+                    SendTransacEmailRequestToItem(
+                        email=username,
+                    )
+                ],
+            )
+            
+            
+            messages.success(request, "OTP has been sent to your Email...")
+            return render(request, "otp_verify.html")
     return render(request=request, template_name='login.html')
 
 
@@ -136,10 +194,8 @@ You may want to monitor this account or take any necessary action.
 System Notification - Invoice Generator
 </p>
 """
-        client = Brevo(
-        api_key=os.getenv("BREVO_API_KEY"),
-        )
-        response = client.transactional_emails.send_transac_email(
+        client = Brevo(api_key=os.getenv("BREVO_API_KEY"))
+        client.transactional_emails.send_transac_email(
             html_content=user_email,
             sender=SendTransacEmailRequestSender(
                 email=os.getenv('EMAIL'),
@@ -153,9 +209,6 @@ System Notification - Invoice Generator
                 )
             ],
         )
-
-        print(response)
-
         resend.api_key = os.getenv("RESEND_API_KEY")
         resend.Emails.send({
             "from": "onboarding@resend.dev",

@@ -39,14 +39,6 @@ function showFrontendMessage(text, type = 'success') {
     setTimeout(() => hideMessage(alert), 5000);
 }
 
-const otpVerifyForm = document.getElementById('otpVerifyForm');
-if (otpVerifyForm) {
-    otpVerifyForm.addEventListener('submit', event => {
-        event.preventDefault();
-        showFrontendMessage('OTP verified successfully.', 'success');
-    });
-}
-
 function switchTab(tab) {
     const isPw = (tab === 'password');
     document.getElementById('tabPassword').classList.toggle('active', isPw);
@@ -90,37 +82,6 @@ function showOtpStep2(email) {
 function goBackToStep1() {
     document.getElementById('otpStep2').style.display = 'none';
     document.getElementById('otpStep1').style.display = 'block';
-}
-
-/* ── OTP countdown timer (display only) ── */
-let countdownTimer;
-function startCountdown(seconds) {
-    clearInterval(countdownTimer);
-    let s = seconds;
-    const el = document.getElementById('countdown');
-    const resendBtn = document.getElementById('resendBtn');
-    resendBtn.classList.remove('visible');
-    el.closest('.resend-timer').style.display = '';
-    countdownTimer = setInterval(() => {
-        s--;
-        el.textContent = s;
-        if (s <= 0) {
-            clearInterval(countdownTimer);
-            el.closest('.resend-timer').style.display = 'none';
-            resendBtn.classList.add('visible');
-        }
-    }, 1000);
-}
-
-/* ── Resend OTP ── */
-function resendOtp() {
-    /* Submit the request form again with the same email.
-       Django handles rate-limiting and sending. */
-    const email = document.getElementById('hiddenOtpEmail').value
-        || document.getElementById('otp_email').value;
-    const form = document.getElementById('otpRequestForm');
-    document.getElementById('otp_email').value = email;
-    form.submit();
 }
 
 /* ── OTP input: auto-advance and auto-fill combined field ── */

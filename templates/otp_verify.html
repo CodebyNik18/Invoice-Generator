@@ -66,7 +66,8 @@
                     We sent a code to your email.
                 </p>
 
-                <form action="#" novalidate id="otpVerifyForm">
+                <form method="post" action="{% url 'otpverify' %}" novalidate id="otpVerifyForm">
+                    {% csrf_token %}
                     <input type="hidden" name="login_method" value="otp">
 
                     <div class="field">
