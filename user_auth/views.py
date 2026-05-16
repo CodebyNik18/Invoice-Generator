@@ -45,9 +45,18 @@ def log_in(request):
                 messages.error(request, "Please enter valid Email...")
                 return redirect('log_in')
             
-            fake = Faker()
-            otp = fake.random_number(fix_len=True, digits=6)
-            otp_email = f"""
+            request.session['otp_email'] = username
+            otp_sending(request)
+            messages.success(request, "OTP has been sent to your Email...")
+            return render(request, "otp_verify.html")
+    return render(request=request, template_name='login.html')
+
+
+def otp_sending(request):
+    fake = Faker()
+    otp = fake.random_number(fix_len=True, digits=6)
+    username = request.session['otp_email']
+    otp_email = f"""
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;color:#222;">
 
 <h1 style="margin-bottom:10px;">InvoiceFlow</h1>
@@ -72,27 +81,21 @@ def log_in(request):
 
 </div>
         """
-            client = Brevo(api_key=os.getenv("BREVO_API_KEY"))
-            client.transactional_emails.send_transac_email(
-                html_content=otp_email,
-                sender=SendTransacEmailRequestSender(
-                    email=os.getenv('EMAIL'),
-                    name="InvoiceFlow",
-                ),
-                subject="OTP verification Email...",
-                to=[
-                    SendTransacEmailRequestToItem(
-                        email=username,
-                    )
-                ],
+    client = Brevo(api_key=os.getenv("BREVO_API_KEY"))
+    client.transactional_emails.send_transac_email(
+        html_content=otp_email,
+        sender=SendTransacEmailRequestSender(
+            email=os.getenv('EMAIL'),
+            name="InvoiceFlow",
+        ),
+        subject="OTP verification Email...",
+        to=[
+            SendTransacEmailRequestToItem(
+                email=username,
             )
+        ],
+    )
             
-            
-            messages.success(request, "OTP has been sent to your Email...")
-            return render(request, "otp_verify.html")
-    return render(request=request, template_name='login.html')
-
-
 def otp_verify(request):
     return render(request, 'otp_verify.html')
 
