@@ -11,6 +11,7 @@ import os
 from faker import Faker
 
 load_dotenv()
+fake = Faker()
 
 def log_in(request):
     if request.method == 'POST':
@@ -47,13 +48,11 @@ def log_in(request):
             
             request.session['otp_email'] = username
             otp_sending(request)
-            messages.success(request, "OTP has been sent to your Email...")
             return render(request, "otp_verify.html")
     return render(request=request, template_name='login.html')
 
 
 def otp_sending(request):
-    fake = Faker()
     otp = fake.random_number(fix_len=True, digits=6)
     username = request.session['otp_email']
     otp_email = f"""
@@ -81,6 +80,8 @@ def otp_sending(request):
 
 </div>
         """
+    
+    request.session['otp'] = otp
     client = Brevo(api_key=os.getenv("BREVO_API_KEY"))
     client.transactional_emails.send_transac_email(
         html_content=otp_email,
@@ -95,8 +96,25 @@ def otp_sending(request):
             )
         ],
     )
+
+    messages.success(request, "OTP has been sent to your Email...")
+    return render(request, 'otp_verify.html')
             
 def otp_verify(request):
+    if request.method == 'POST':
+        user_otp = request.POST['otp_code']
+        email = request.session['otp_email']
+        user = User.objects.get(username=email)
+
+        generated_otp = str(request.session['otp'])
+
+        if user_otp != generated_otp:
+            messages.error(request, 'Invalid OTP...')
+            return redirect('otpverify')
+        
+        login(request, user)
+        return redirect('invoice')
+    
     return render(request, 'otp_verify.html')
 
 

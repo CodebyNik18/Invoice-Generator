@@ -99,12 +99,15 @@
                     </button>
                 </form>
 
-                <div style="text-align:center; margin-top:1rem;">
-                    <button type="button"
-                        style="font-size:.8rem;color:var(--green-dark);background:none;border:none;cursor:pointer;text-decoration:underline;font-weight:600;">
-                        Resend OTP
-                    </button>
-                </div>
+                <form method="post" action="{% url 'otpsending' %}">
+                    {% csrf_token %}
+                    <div style="text-align:center; margin-top:1rem;">
+                        <button type="submit"
+                            style="font-size:.8rem;color:var(--green-dark);background:none;border:none;cursor:pointer;text-decoration:underline;font-weight:600;">
+                            Resend OTP
+                        </button>
+                    </div>
+                </form>
 
                 <p class="terms-note">
                     Need a different account? <a href="{% url 'log_in' %}">Go back to sign in</a>.
