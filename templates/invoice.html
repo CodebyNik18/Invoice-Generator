@@ -18,16 +18,7 @@
 
     <!-- NAV -->
     <nav id="nav">
-        <a href="index.html" class="logo">Invoice<span>Flow</span></a>
-        <!-- <div class="nav-mid">
-            <div class="steps">
-                <div class="step done"><span class="step-num">✓</span> Account</div>
-                <div class="step-sep"></div>
-                <div class="step active"><span class="step-num">2</span> Create</div>
-                <div class="step-sep"></div>
-                <div class="step"><span class="step-num">3</span> Download</div>
-            </div>
-        </div> -->
+        <a href="{% url 'home' %}" class="logo">Invoice<span>Flow</span></a>
         <div class="nav-right">
             <a href="/dashboard" class="btn btn-ghost btn-sm">My Invoices</a>
             <button class="btn btn-green btn-sm" onclick="downloadPDF()">

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from user_auth.models import Profile
 from django.contrib.auth import authenticate, login
+from django.utils import timezone
 from brevo import Brevo
 from brevo.transactional_emails import SendTransacEmailRequestSender, SendTransacEmailRequestToItem
 from dotenv import load_dotenv
@@ -97,22 +98,36 @@ def otp_sending(request):
         ],
     )
 
+    request.session['time'] = timezone.now().timestamp()
     messages.success(request, "OTP has been sent to your Email...")
     return render(request, 'otp_verify.html')
             
 def otp_verify(request):
     if request.method == 'POST':
-        user_otp = request.POST['otp_code']
+        user_otp = str(request.POST['otp_code'])
         email = request.session['otp_email']
         user = User.objects.get(username=email)
 
         generated_otp = str(request.session['otp'])
 
+        if not user_otp:
+            messages.error(request, 'Please enter OTP...')
+            return redirect('otpverify')
+        
         if user_otp != generated_otp:
             messages.error(request, 'Invalid OTP...')
             return redirect('otpverify')
         
+        total_time = timezone.now().timestamp() - request.session['time']
+        print(total_time)
+        if total_time > 300:
+            messages.error(request, 'Time expired, Please request another OTP...')
+            return redirect('otpverify')
+        
         login(request, user)
+        del request.session['otp']
+        del request.session['time']
+        del request.session['otp_email']
         return redirect('invoice')
     
     return render(request, 'otp_verify.html')
