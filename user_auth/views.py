@@ -29,7 +29,7 @@ def log_in(request):
             user = authenticate(request=request, username=username, password=password)
             if user:
                 login(request, user)
-                return render(request=request, template_name="invoice.html")
+                return redirect('invoice')
             
             else:
                 messages.error(request, "Invalid Credentials...")

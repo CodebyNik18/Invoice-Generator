@@ -14,13 +14,6 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('invDate').value = fmt(today);
     document.getElementById('invDue').value = fmt(due);
 
-    // Load from localStorage if available
-    const saved = localStorage.getItem('invoiceflow_draft');
-    if (saved) {
-        try { restoreState(JSON.parse(saved)); }
-        catch (e) { /* fresh start */ }
-    }
-
     // Start with 2 blank items
     if (items.length === 0) { addItem(); addItem(); }
 
@@ -68,24 +61,26 @@ function renderItems() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
       <td class="item-desc">
-        <input type="text" placeholder="Service or product description"
+        <input type="text" name="item_desc" placeholder="Service or product description"
           value="${esc(item.desc)}"
           oninput="itemChange(${item.id},'desc',this.value)"
           style="width:100%"/>
       </td>
       <td class="item-num">
-        <input type="number" value="${item.qty}" min="0" step="0.5"
+        <input type="number" name="item_qty" value="${item.qty}" min="0" step="0.5"
           oninput="itemChange(${item.id},'qty',this.value)"
           style="width:100%;text-align:right"/>
       </td>
       <td class="item-num">
-        <input type="number" value="${item.rate}" min="0"
+        <input type="number" name="item_rate" value="${item.rate}" min="0"
           oninput="itemChange(${item.id},'rate',this.value)"
           style="width:100%;text-align:right"/>
       </td>
       <td class="item-amount">${getCur()}${num(item.qty * item.rate)}</td>
       <td style="text-align:center">
-        <button class="del-btn" onclick="removeItem(${item.id})">
+        <input type="hidden" name="item_id" value="${item.id}">
+        <input type="hidden" name="item_amount" value="${item.qty * item.rate}">
+        <button type="button" class="del-btn" onclick="removeItem(${item.id})">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
           </svg>
@@ -120,6 +115,10 @@ function update() {
     document.getElementById('fTax').textContent = cur + num(tax);
     document.getElementById('fDisc').textContent = '-' + cur + num(disc);
     document.getElementById('fTotal').textContent = cur + num(total);
+    document.getElementById('subtotalInput').value = subtotal.toFixed(2);
+    document.getElementById('taxInput').value = tax.toFixed(2);
+    document.getElementById('discountInput').value = disc.toFixed(2);
+    document.getElementById('totalInput').value = total.toFixed(2);
 
     // ── PREVIEW ──
     // From
@@ -191,9 +190,10 @@ function update() {
     document.querySelectorAll('#itemsBody tr').forEach((tr, i) => {
         const amtCell = tr.querySelector('.item-amount');
         if (amtCell && items[i]) amtCell.textContent = cur + num(items[i].qty * items[i].rate);
+        const amtInput = tr.querySelector('input[name="item_amount"]');
+        if (amtInput && items[i]) amtInput.value = (items[i].qty * items[i].rate).toFixed(2);
     });
 
-    autoSave();
 }
 
 function fmtDisplay(dateStr) {
@@ -221,7 +221,6 @@ function uploadLogo(input) {
         prevLogo.src = src;
         prevLogo.style.display = 'block';
         if (placeholder) placeholder.style.display = 'none';
-        localStorage.setItem('invoiceflow_logo', src);
     };
     reader.readAsDataURL(file);
 }
@@ -229,63 +228,12 @@ function uploadLogo(input) {
 /* ─────────────────────────────────────────────
    AUTO-SAVE
 ───────────────────────────────────────────── */
-let saveTimer;
-function autoSave() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-        const state = getState();
-        localStorage.setItem('invoiceflow_draft', JSON.stringify(state));
-    }, 800);
-}
-
-function getState() {
-    return {
-        fromName: v('fromName'), fromAddr: v('fromAddr'), fromEmail: v('fromEmail'), fromPhone: v('fromPhone'),
-        toName: v('toName'), toAddr: v('toAddr'), toEmail: v('toEmail'),
-        invNum: v('invNum'), invDate: v('invDate'), invDue: v('invDue'), poNum: v('poNum'),
-        currency: document.getElementById('currency').value,
-        taxRate: v('taxRate'), discRate: v('discRate'),
-        notes: v('notes'), terms: v('terms'),
-        items: items.map(i => ({ ...i }))
-    };
-}
-
-function restoreState(s) {
-    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
-    set('fromName', s.fromName); set('fromAddr', s.fromAddr); set('fromEmail', s.fromEmail); set('fromPhone', s.fromPhone);
-    set('toName', s.toName); set('toAddr', s.toAddr); set('toEmail', s.toEmail);
-    set('invNum', s.invNum); set('invDate', s.invDate); set('invDue', s.invDue); set('poNum', s.poNum);
-    set('currency', s.currency); set('taxRate', s.taxRate); set('discRate', s.discRate);
-    set('notes', s.notes); set('terms', s.terms);
-    if (s.items && s.items.length) {
-        items = s.items;
-        itemId = Math.max(...items.map(i => i.id), 0);
-        renderItems();
-    }
-    // Logo
-    const logo = localStorage.getItem('invoiceflow_logo');
-    if (logo) {
-        document.getElementById('logoPreview').src = logo;
-        document.getElementById('logoPreview').style.display = 'block';
-        document.getElementById('logoIcon').style.display = 'none';
-        document.getElementById('logoText').style.display = 'none';
-        document.getElementById('prevLogo').src = logo;
-        document.getElementById('prevLogo').style.display = 'block';
-        const ph = document.querySelector('.inv-logo-placeholder');
-        if (ph) ph.style.display = 'none';
-    }
-}
-
 function saveDraft() {
-    autoSave();
     toast('Draft saved successfully!', 'green');
-    /* Wire to Django: fetch('/api/invoices/save/', { method:'POST', body:JSON.stringify(getState()) }) */
 }
 
 function clearForm() {
     if (!confirm('Reset all fields? This cannot be undone.')) return;
-    localStorage.removeItem('invoiceflow_draft');
-    localStorage.removeItem('invoiceflow_logo');
     location.reload();
 }
 

@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -23,5 +25,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('pages/', include('pages.urls')),
     path('accounts/', include('user_auth.urls')),
-    path('invoice-generator/', views.invoice, name='invoice')
-]
+    path('', include('invoices.urls')),
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

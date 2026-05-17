@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pages',
     'user_auth',
+    'invoices',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,7 @@ STATIC_ROOT = 'static/'
 STATICFILES_DIRS = [
     'invoice_generator/static/',
 ]
+
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR/'media'
