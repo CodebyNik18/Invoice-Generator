@@ -22,7 +22,7 @@ class Invoice(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.user.username
 
 
 class InvoiceDetails(models.Model):
@@ -41,7 +41,7 @@ class InvoiceDetails(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.invoice.user.get_full_name()
+        return self.invoice.user.username
 
 class InvoiceItems(models.Model):
 
@@ -57,7 +57,7 @@ class InvoiceItems(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.invoice.user.get_full_name()
+        return self.invoice.user.username
 
 class InvoiceTotal(models.Model):
 
@@ -75,7 +75,7 @@ class InvoiceTotal(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.invoice.user.get_full_name()
+        return self.invoice.user.username
 
 class InvoiceTerms(models.Model):
 
@@ -88,4 +88,4 @@ class InvoiceTerms(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.invoice.user.get_full_name()
+        return self.invoice.user.username

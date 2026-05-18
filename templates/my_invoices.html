@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Invoices - InvoiceFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --mint: #e8f5ee;
+            --green: #4a9b6f;
+            --green-dark: #2e6b4a;
+            --terra: #d4663a;
+            --cream: #faf8f3;
+            --warm: #f5f0e8;
+            --ink: #1a2e20;
+            --ink-60: rgba(26, 46, 32, .6);
+            --ink-30: rgba(26, 46, 32, .3);
+            --border: rgba(26, 46, 32, .1);
+            --white: #fff;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--warm);
+            color: var(--ink);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            height: 64px;
+            padding: 0 clamp(1rem, 4vw, 3rem);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(250, 248, 243, .94);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--terra);
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2.3rem 0 3rem;
+        }
+
+        .page-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .eyebrow {
+            color: var(--green-dark);
+            font-size: .74rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: .35rem;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: .95;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 100px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: .55rem 1rem;
+            font: inherit;
+            font-size: .82rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: transform .2s, background .2s, border-color .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-dark {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--ink);
+        }
+
+        .btn-danger {
+            background: #fff1ed;
+            color: #b34f26;
+        }
+
+        .invoice-list {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--cream);
+        }
+
+        .list-head,
+        .invoice-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr .9fr .7fr 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .list-head {
+            padding: .9rem 1rem;
+            background: var(--ink);
+            color: rgba(255, 255, 255, .72);
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .invoice-row {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--ink-60);
+            font-size: .9rem;
+        }
+
+        .invoice-main {
+            display: flex;
+            flex-direction: column;
+            gap: .2rem;
+        }
+
+        .invoice-number {
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        .invoice-from {
+            color: var(--ink-30);
+            font-size: .78rem;
+        }
+
+        .amount {
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        .row-actions {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .empty-state {
+            display: grid;
+            justify-items: center;
+            gap: .8rem;
+            padding: 4rem 1.5rem;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .empty-state h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+        }
+
+        .empty-state p {
+            color: var(--ink-60);
+        }
+
+        @media (max-width: 820px) {
+            .page-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .list-head {
+                display: none;
+            }
+
+            .invoice-list {
+                display: grid;
+                gap: .75rem;
+                border: 0;
+                background: transparent;
+            }
+
+            .invoice-row {
+                grid-template-columns: 1fr;
+                gap: .65rem;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                background: var(--cream);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="#" class="logo">Invoice<span>Flow</span></a>
+        <div class="nav-actions">
+            <a href="#" class="btn btn-dark">New Invoice</a>
+        </div>
+    </nav>
+
+    <main class="page">
+        <section class="page-head">
+            <div>
+                <p class="eyebrow">Your account</p>
+                <h1>My Invoices</h1>
+            </div>
+            <a href="#" class="btn btn-green">Create Invoice</a>
+        </section>
+
+        <section class="invoice-list" aria-label="Saved invoices">
+            <div class="list-head">
+                <span>Invoice</span>
+                <span>Client</span>
+                <span>Date</span>
+                <span>Total</span>
+                <span>Actions</span>
+            </div>
+
+            <article class="invoice-row">
+                <div class="invoice-main">
+                    <span class="invoice-number">INV-2026-001</span>
+                    <span class="invoice-from">Riya Sharma Design Studio</span>
+                </div>
+                <div>Acme Technologies</div>
+                <div>May 18, 2026</div>
+                <div class="amount">₹24,780.00</div>
+                <div class="row-actions">
+                    <a href="#" class="btn btn-ghost">Edit</a>
+                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                </div>
+            </article>
+
+            <article class="invoice-row">
+                <div class="invoice-main">
+                    <span class="invoice-number">INV-2026-002</span>
+                    <span class="invoice-from">Riya Sharma Design Studio</span>
+                </div>
+                <div>Northstar Labs</div>
+                <div>May 12, 2026</div>
+                <div class="amount">₹18,500.00</div>
+                <div class="row-actions">
+                    <a href="#" class="btn btn-ghost">Edit</a>
+                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                </div>
+            </article>
+
+            <article class="invoice-row">
+                <div class="invoice-main">
+                    <span class="invoice-number">INV-2026-003</span>
+                    <span class="invoice-from">Riya Sharma Design Studio</span>
+                </div>
+                <div>Pixel Yard</div>
+                <div>May 04, 2026</div>
+                <div class="amount">₹9,999.00</div>
+                <div class="row-actions">
+                    <a href="#" class="btn btn-ghost">Edit</a>
+                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                </div>
+            </article>
+        </section>
+
+        <section class="empty-state" hidden>
+            <h2>No invoices saved yet</h2>
+            <p>Use this state when your backend returns an empty invoice list.</p>
+            <a href="#" class="btn btn-green">Create Invoice</a>
+        </section>
+    </main>
+
+    <script>
+        document.querySelectorAll('.delete-btn').forEach((button) => {
+            button.addEventListener('click', () => {
+                if (confirm('Delete this invoice from the page?')) {
+                    button.closest('.invoice-row').remove();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
