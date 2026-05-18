@@ -21,27 +21,71 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.user.get_full_name()
+
 
 class InvoiceDetails(models.Model):
+
     invoice = models.OneToOneField(to=Invoice, on_delete=models.CASCADE)
+
     invoice_number = models.CharField(max_length=100, blank=True, null=True)
-    invoice_date = models.DateField(blank=True, null=True)
-    due_date = models.DateField(blank=True, null=True)
-    currency = models.CharField(max_length=10, blank=True, null=True)
     po_number = models.CharField(max_length=50, blank=True, null=True)
 
+    invoice_date = models.DateField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+
+    currency = models.CharField(max_length=10, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.invoice.user.get_full_name()
+
 class InvoiceItems(models.Model):
+
     invoice = models.ForeignKey(to=Invoice, on_delete=models.CASCADE)
+
     item_desc = models.CharField(max_length=300, blank=True, null=True)
     item_qty = models.CharField(blank=True, null=True)
     item_rate = models.CharField(blank=True, null=True)
     item_id = models.CharField(blank=True, null=True)
     item_amount = models.CharField(blank=True, null=True)
 
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.invoice.user.get_full_name()
+
 class InvoiceTotal(models.Model):
+
     invoice = models.OneToOneField(to=Invoice, on_delete=models.CASCADE)
-    pass # 'tax_rate': ['18'], 'discount_rate': ['0'], 'subtotal': ['0.00'], 'tax_amount': ['0.00'], 'discount_amount': ['0.00'], 'total_amount': ['0.00']
+
+    tax_rate = models.CharField(blank=True, null=True)
+    discount_rate = models.CharField(blank=True, null=True)
+    subtotal = models.CharField(blank=True, null=True)
+
+    tax_amount = models.CharField(blank=True, null=True)
+    discount_amount = models.CharField(blank=True, null=True)
+    total_amount = models.CharField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.invoice.user.get_full_name()
 
 class InvoiceTerms(models.Model):
+
     invoice = models.OneToOneField(to=Invoice, on_delete=models.CASCADE)
-    pass # 'notes': [''], 'terms': ['']
+
+    notes = models.TextField(blank=True, null=True)
+    terms = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.invoice.user.get_full_name()
